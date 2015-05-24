@@ -1,0 +1,37 @@
+{
+  "name": "react-virtual-list",
+  "version": "1.0.0",
+  "description": "Super simple virtualized list React component",
+  "main": "dist/virtual-list.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "gulp default",
+    "test": "jasmine-node test --verbose --matchall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developerdizzle/react-virtual-list.git"
+  },
+  "keywords": [
+    "react",
+    "virtual",
+    "list",
+    "render",
+    "scroll"
+  ],
+  "author": "developerdizzle",
+  "bugs": {
+    "url": "https://github.com/developerdizzle/react-virtual-list/issues"
+  },
+  "homepage": "https://github.com/developerdizzle/react-virtual-list",
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-react": "^3.0.1",
+    "jasmine-node": "^1.14.5"
+  }
+}
