@@ -20,7 +20,11 @@ function documentOffsetTop(element) {
 }
 
 var VirtualList = React.createClass({
-    // TODO add propTypes
+    propTypes: {
+        items: React.PropTypes.array.isRequired,
+        itemHeight: React.PropTypes.number.isRequired,
+        renderItem: React.PropTypes.func.isRequired
+    },
     getVirtualState: function(props) {
         // default values
         var state = {
