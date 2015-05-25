@@ -35,20 +35,17 @@ var VirtualList = React.createClass({displayName: "VirtualList",
 
         if (items.length === 0) return state;
         
-        // how far is the list element from the top of the document?
         var offsetTop = this.isMounted() ? documentOffsetTop(this.getDOMNode()) : 0;
 
         var renderer = new VirtualRenderer(window.scrollY, window.innerHeight, offsetTop, props.itemHeight, items.length);
         
         var renderStats = renderer.getItems();
-
+        
         if (renderStats.itemsInView.length === 0) return state;
 
         state.items = items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
         state.bufferStart = renderStats.firstItemIndex * props.itemHeight;
         state.bufferEnd = renderStats.itemsAfterView * props.itemHeight;
-
-        console.log(state);
 
         return state;
     },
@@ -84,8 +81,6 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         this.setState(state);
     },
     render: function() {
-        console.log('VirtualList.render');
-        
         return (
         React.createElement("div", null, 
             React.createElement("div", {style: {height: this.state.bufferStart}}), 
