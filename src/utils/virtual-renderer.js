@@ -7,7 +7,7 @@ function VirtualRenderer(viewTop, viewHeight, listTop, itemHeight, itemCount) {
 }
 
 VirtualRenderer.getBox = function(view, list) {
-    list.height = list.bottom - list.top;
+    list.height = list.height || list.bottom - list.top;
     
     return {
         top: Math.max(0, Math.min(view.top - list.top)),
@@ -30,7 +30,6 @@ VirtualRenderer.prototype.getItems = function() {
     
     var viewBox = {
         top: this.viewTop,
-        height: this.viewHeight,
         bottom: this.viewTop + this.viewHeight
     };
     
@@ -46,12 +45,12 @@ VirtualRenderer.prototype.getItems = function() {
     
     var listViewBox = VirtualRenderer.getBox(viewBox, listBox);
     
-    var firstItemIndex = listViewBox.top > -1 ? Math.floor(listViewBox.top / this.itemHeight) : 0;
+    var firstItemIndex = Math.max(0,  Math.floor(listViewBox.top / this.itemHeight));
     var lastItemIndex = Math.ceil(listViewBox.bottom / this.itemHeight) - 1;
     
     var itemsInView = lastItemIndex - firstItemIndex + 1;
     var itemsBeforeView = firstItemIndex;
-    var itemsAfterView = this.itemCount - 1 - lastItemIndex;
+    var itemsAfterView = this.itemCount - lastItemIndex - 1;
 
     var result = {
         firstItemIndex: firstItemIndex,
