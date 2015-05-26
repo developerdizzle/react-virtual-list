@@ -40,4 +40,4 @@ Check out [https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/A
 
 ## Tests
 
-Use `npm test` to run the tests using [jasmine-node](https://github.com/mhevery/jasmine-node).  Currently only the calculations inside `./src/utils/view-renderer.js` are tested.  Hoping to add some DOM tests as well.
+Use `npm test` to run the tests using [jasmine-node](https://github.com/mhevery/jasmine-node).  Currently only the calculations inside `./src/utils/virtual-renderer.js` are tested.  Hoping to add some DOM tests as well.
