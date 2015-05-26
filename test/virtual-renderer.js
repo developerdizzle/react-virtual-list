@@ -263,7 +263,6 @@ describe('renderer that calculates the items to render (and to not render)', fun
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(4);
         expect(result.lastItemIndex).toBe(3);
-        expect(result.itemsBeforeView).toBe(0);
         expect(result.itemsAfterView).toBe(0);
     });
      

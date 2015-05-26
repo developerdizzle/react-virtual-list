@@ -13,17 +13,27 @@ function areArraysEqual(a, b) {
     return true;
 }
 
-function documentOffsetTop(element) {
-    if (!element) return 0;
+function topDifference(element, container) {
+    return topFromWindow(element) - topFromWindow(container);
+}
+
+function topFromWindow(element) {
+    if (!element || element === window) return 0;
     
-    return element.offsetTop + documentOffsetTop(element.offsetParent);
+    return element.offsetTop + topFromWindow(element.offsetParent);
 }
 
 var VirtualList = React.createClass({
     propTypes: {
         items: React.PropTypes.array.isRequired,
         itemHeight: React.PropTypes.number.isRequired,
-        renderItem: React.PropTypes.func.isRequired
+        renderItem: React.PropTypes.func.isRequired,
+        container: React.PropTypes.object.isRequired
+    },
+    getDefaultProps: function() {
+        return {
+            container: window
+        };
     },
     getVirtualState: function(props) {
         // default values
@@ -33,24 +43,35 @@ var VirtualList = React.createClass({
             bufferEnd: 0
         };
         
-        if (typeof window === 'undefined') return state;
+        // early return if nothing to render
+        if (typeof this.props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || !this.isMounted()) return state;
         
         var items = props.items;
 
-        if (items.length === 0) return state;
-        
-        var offsetTop = this.isMounted() ? documentOffsetTop(this.getDOMNode()) : 0;
+        var container = this.props.container;
 
-        var renderer = new VirtualRenderer(window.scrollY, window.innerHeight, offsetTop, props.itemHeight, items.length);
+        var viewHeight = typeof container.innerHeight !== 'undefined' ? container.innerHeight : container.clientHeight;
         
+        // no space to render
+        if (viewHeight <= 0) return state;
+        
+        var list = this.getDOMNode();
+
+        var offsetTop = topDifference(list, container);
+
+        var viewTop = typeof container.scrollY !== 'undefined' ? container.scrollY : container.scrollTop;
+
+        var renderer = new VirtualRenderer(viewTop, viewHeight, offsetTop, props.itemHeight, items.length);
+
         var renderStats = renderer.getItems();
         
+        // no items to render
         if (renderStats.itemsInView.length === 0) return state;
 
         state.items = items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
         state.bufferStart = renderStats.firstItemIndex * props.itemHeight;
         state.bufferEnd = renderStats.itemsAfterView * props.itemHeight;
-
+        
         return state;
     },
     getInitialState: function() {
@@ -74,10 +95,10 @@ var VirtualList = React.createClass({
         
         this.setState(state);
         
-        window.addEventListener('scroll', this.onScroll);
+        this.props.container.addEventListener('scroll', this.onScroll);
     },
     componentWillUnmount: function() {
-        window.removeEventListener('scroll', this.onScroll);
+        this.props.container.removeEventListener('scroll', this.onScroll);
     },
     onScroll: function() {
         var state = this.getVirtualState(this.props);

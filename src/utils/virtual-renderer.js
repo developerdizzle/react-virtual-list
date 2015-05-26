@@ -49,13 +49,11 @@ VirtualRenderer.prototype.getItems = function() {
     var lastItemIndex = Math.ceil(listViewBox.bottom / this.itemHeight) - 1;
     
     var itemsInView = lastItemIndex - firstItemIndex + 1;
-    var itemsBeforeView = firstItemIndex;
     var itemsAfterView = this.itemCount - lastItemIndex - 1;
 
     var result = {
         firstItemIndex: firstItemIndex,
         lastItemIndex: lastItemIndex,
-        itemsBeforeView: itemsBeforeView,
         itemsInView: itemsInView,
         itemsAfterView: itemsAfterView
     };
