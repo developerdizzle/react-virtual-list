@@ -32,6 +32,7 @@ var VirtualList = require('./node_modules/react-virtual-list/dist/VirtualList.js
 * `items` the full array of list items.  Only the visible subset of these will be rendered.
 * `renderItem` a function to render a single item, passed as argument `item`
 * `itemHeight` the height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
+* `container` the scrollable element that contains the list.  Defaults to `window`
 
 #### Example Usage
 
