@@ -1,5 +1,5 @@
 # react-virtual-list
-Super simple virtualized list React component
+Super simple virtualized list [React](https://github.com/facebook/react) component
 
 [Check out the demo here](http://developerdizzle.github.io/react-virtual-list)
 
@@ -32,8 +32,12 @@ var VirtualList = require('./node_modules/react-virtual-list/dist/VirtualList.js
 * `items` the full array of list items.  Only the visible subset of these will be rendered.
 * `renderItem` a function to render a single item, passed as argument `item`.  Must return a single React element (`React.createElement(...)`)
 * `itemHeight` the height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
-* `container` the scrollable element that contains the list.  Defaults to `window`
+* `container` the scrollable element that contains the list.  Defaults to `window`.  Use this if you have a list inside an element with `overflow: scroll`.
 
 #### Example Usage
 
 Check out [https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx](https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx) for the example used in the demo.
+
+## Tests
+
+Use `npm test` to run the tests using [jasmine-node](https://github.com/mhevery/jasmine-node).  Currently only the calculations inside `./src/utils/view-renderer.js` are tested.  Hoping to add some DOM tests as well.
