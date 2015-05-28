@@ -109,10 +109,8 @@ var VirtualList = React.createClass({displayName: "VirtualList",
     },
     render: function() {
         return (
-        React.createElement(this.props.tagName, React.__spread({},  this.props), 
-            React.createElement("div", {style: {height: this.state.bufferStart}}), 
-            this.state.items.map(this.props.renderItem), 
-            React.createElement("div", {style: {height: this.state.bufferEnd}})
+        React.createElement(this.props.tagName, React.__spread({},  this.props, {style: {paddingTop: this.state.bufferStart, paddingBottom: this.state.bufferEnd}}), 
+            this.state.items.map(this.props.renderItem)
         )
         );
     }
