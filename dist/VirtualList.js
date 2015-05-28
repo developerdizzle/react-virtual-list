@@ -42,15 +42,18 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         var state = {
             items: [],
             bufferStart: 0,
-            bufferEnd: 0
+            bufferEnd: 0,
+            height: 0
         };
         
         // early return if nothing to render
-        if (typeof this.props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || !this.isMounted()) return state;
+        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || !this.isMounted()) return state;
         
         var items = props.items;
+        
+        state.height = props.items.length * props.itemHeight;
 
-        var container = this.props.container;
+        var container = props.container;
 
         var viewHeight = typeof container.innerHeight !== 'undefined' ? container.innerHeight : container.clientHeight;
         
@@ -82,6 +85,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.bufferStart !== nextState.bufferStart) return true;
         if (this.state.bufferEnd !== nextState.bufferEnd) return true;
+        if (this.state.height !== nextState.height) return true;
         
         var equal = areArraysEqual(this.state.items, nextState.items);
         
@@ -109,7 +113,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
     },
     render: function() {
         return (
-        React.createElement(this.props.tagName, React.__spread({},  this.props, {style: {paddingTop: this.state.bufferStart, paddingBottom: this.state.bufferEnd}}), 
+        React.createElement(this.props.tagName, React.__spread({},  this.props, {style: {height: this.state.height, paddingTop: this.state.bufferStart, paddingBottom: this.state.bufferEnd}}), 
             this.state.items.map(this.props.renderItem)
         )
         );
