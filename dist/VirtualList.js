@@ -28,11 +28,13 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         items: React.PropTypes.array.isRequired,
         itemHeight: React.PropTypes.number.isRequired,
         renderItem: React.PropTypes.func.isRequired,
-        container: React.PropTypes.object.isRequired
+        container: React.PropTypes.object.isRequired,
+        tagName: React.PropTypes.string.isRequired
     },
     getDefaultProps: function() {
         return {
-            container: window
+            container: window,
+            tagName: 'div'
         };
     },
     getVirtualState: function(props) {
@@ -107,7 +109,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
     },
     render: function() {
         return (
-        React.createElement("div", React.__spread({},  this.props), 
+        React.createElement(this.props.tagName, React.__spread({},  this.props), 
             React.createElement("div", {style: {height: this.state.bufferStart}}), 
             this.state.items.map(this.props.renderItem), 
             React.createElement("div", {style: {height: this.state.bufferEnd}})

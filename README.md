@@ -33,6 +33,9 @@ var VirtualList = require('./node_modules/react-virtual-list/dist/VirtualList.js
 * `renderItem` a function to render a single item, passed as argument `item`.  Must return a single React element (`React.createElement(...)`)
 * `itemHeight` the height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
 * `container` the scrollable element that contains the list.  Defaults to `window`.  Use this if you have a list inside an element with `overflow: scroll`.
+* `tagName` the tagName for the root element that surrounds the items rendered by renderItem.  Defaults to `div`.  Use this if you want to render a list with `ul` and `li`, or any other elements.
+ 
+Any other properties set on `VirtualList`, such as `className`, will be reflected on the component's root element.
 
 #### Example Usage
 
