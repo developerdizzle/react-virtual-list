@@ -93,6 +93,9 @@ var VirtualList = React.createClass({displayName: "VirtualList",
     },
     componentWillReceiveProps: function(nextProps) {
         var state = this.getVirtualState(nextProps);
+
+        this.props.container.removeEventListener('scroll', this.onScroll);
+        nextProps.container.addEventListener('scroll', this.onScroll);
         
         this.setState(state);
     },
