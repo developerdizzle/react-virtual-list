@@ -90,7 +90,7 @@ var VirtualList = React.createClass({
     },
     render: function() {
         return (
-        <this.props.tagName {...this.props} style={{height: this.state.height, paddingTop: this.state.bufferStart }} >
+        <this.props.tagName {...this.props} style={{boxSizing: 'border-box', height: this.state.height, paddingTop: this.state.bufferStart }} >
             {this.state.items.map(this.props.renderItem)}
         </this.props.tagName>
         );
