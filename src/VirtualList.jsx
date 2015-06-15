@@ -1,18 +1,23 @@
 var React = require('react');
 var utils = require('./utils');
 
+var scrollticker = null;
+var lastScrollTop = null;
+
 var VirtualList = React.createClass({
     propTypes: {
         items: React.PropTypes.array.isRequired,
         itemHeight: React.PropTypes.number.isRequired,
         renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
-        tagName: React.PropTypes.string.isRequired
+        tagName: React.PropTypes.string.isRequired,
+        scrollDelay: React.PropTypes.number
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
-            tagName: 'div'
+            tagName: 'div',
+            scrollDelay: null
         };
     },
     getVirtualState: function(props) {
@@ -84,9 +89,29 @@ var VirtualList = React.createClass({
         this.props.container.removeEventListener('scroll', this.onScroll);
     },
     onScroll: function() {
-        var state = this.getVirtualState(this.props);
-        
-        this.setState(state);
+      if(!this.props.scrollDelay) {
+        this.updateVirtualState();
+      } else {
+        if(!scrollticker) {
+          var that = this;
+          scrollticker = window.setInterval(function(){
+            var container = that.props.container;
+            var scrollTop = typeof container.scrollY !== 'undefined' ? container.scrollY : container.scrollTop;
+            if(lastScrollTop === scrollTop) {
+              window.clearInterval(scrollticker);
+              scrollticker = null;
+
+              that.updateVirtualState();
+            } else {
+              lastScrollTop = scrollTop;
+            }
+          }, this.props.scrollDelay);
+        }
+      }
+    },
+    updateVirtualState: function () {
+      var state = this.getVirtualState(this.props);
+      this.setState(state);
     },
     render: function() {
         return (
