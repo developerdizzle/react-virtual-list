@@ -8,13 +8,15 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
         tagName: React.PropTypes.string.isRequired,
-        scrollDelay: React.PropTypes.number
+        scrollDelay: React.PropTypes.number,
+        itemBuffer: React.PropTypes.number
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
             tagName: 'div',
-            scrollDelay: 0
+            scrollDelay: 0,
+            itemBuffer: 0
         };
     },
     getVirtualState: function(props) {
@@ -45,7 +47,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
 
         var viewTop = typeof container.scrollY !== 'undefined' ? container.scrollY : container.scrollTop;
 
-        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, items.length);
+        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, items.length, props.itemBuffer);
         
         // no items to render
         if (renderStats.itemsInView.length === 0) return state;
@@ -114,7 +116,7 @@ VirtualList.getBox = function(view, list) {
     };
 };
 
-VirtualList.getItems = function(viewTop, viewHeight, listTop, itemHeight, itemCount) {
+VirtualList.getItems = function(viewTop, viewHeight, listTop, itemHeight, itemCount, itemBuffer) {
     if (itemCount === 0 || itemHeight === 0) return {
         itemsInView: 0
     };
@@ -126,6 +128,10 @@ VirtualList.getItems = function(viewTop, viewHeight, listTop, itemHeight, itemCo
         height: listHeight,
         bottom: listTop + listHeight
     };
+    
+    var bufferHeight = itemBuffer * itemHeight;
+    viewTop -= bufferHeight;
+    viewHeight += bufferHeight * 2;
     
     var viewBox = {
         top: viewTop,
