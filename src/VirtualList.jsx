@@ -7,12 +7,14 @@ var VirtualList = React.createClass({
         itemHeight: React.PropTypes.number.isRequired,
         renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
-        tagName: React.PropTypes.string.isRequired
+        tagName: React.PropTypes.string.isRequired,
+        scrollDelay: React.PropTypes.number
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
-            tagName: 'div'
+            tagName: 'div',
+            scrollDelay: 0
         };
     },
     getVirtualState: function(props) {
@@ -58,7 +60,7 @@ var VirtualList = React.createClass({
     },
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.bufferStart !== nextState.bufferStart) return true;
-        // if (this.state.bufferEnd !== nextState.bufferEnd) return true;
+
         if (this.state.height !== nextState.height) return true;
         
         var equal = utils.areArraysEqual(this.state.items, nextState.items);
@@ -66,22 +68,32 @@ var VirtualList = React.createClass({
         return !equal;
     },
     componentWillReceiveProps: function(nextProps) {
+        console.log('componentWillReceiveProps');
+        
         var state = this.getVirtualState(nextProps);
 
-        this.props.container.removeEventListener('scroll', this.onScroll);
-        nextProps.container.addEventListener('scroll', this.onScroll);
+        this.props.container.removeEventListener('scroll', this.onScrollDebounced);
+
+        this.onScrollDebounced = utils.debounce(this.onScroll, nextProps.scrollDelay, false);
+
+        nextProps.container.addEventListener('scroll', this.onScrollDebounced);
         
         this.setState(state);
+    },
+    componentWillMount: function() {
+        console.log('componentWillMount', this.props);
+        
+        this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
     },
     componentDidMount: function() {
         var state = this.getVirtualState(this.props);
         
         this.setState(state);
         
-        this.props.container.addEventListener('scroll', this.onScroll);
+        this.props.container.addEventListener('scroll', this.onScrollDebounced);
     },
     componentWillUnmount: function() {
-        this.props.container.removeEventListener('scroll', this.onScroll);
+        this.props.container.removeEventListener('scroll', this.onScrollDebounced);
     },
     onScroll: function() {
         var state = this.getVirtualState(this.props);

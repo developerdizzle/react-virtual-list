@@ -20,8 +20,32 @@ function topFromWindow(element) {
     return element.offsetTop + topFromWindow(element.offsetParent);
 }
 
+function debounce(func, wait, immediate) {
+    if (!wait) return func;
+    
+	var timeout;
+	
+	return function() {
+		var context = this, args = arguments;
+		
+		var later = function() {
+			timeout = null;
+			
+			if (!immediate) func.apply(context, args);
+		};
+		
+		var callNow = immediate && !timeout;
+		
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		
+		if (callNow) func.apply(context, args);
+	};
+}
+
 module.exports = {
     areArraysEqual: areArraysEqual,
     topDifference: topDifference,
-    topFromWindow: topFromWindow
+    topFromWindow: topFromWindow,
+    debounce: debounce
 };
