@@ -1,4 +1,4 @@
-var VirtualList = require('../dist/VirtualList.js');
+VirtualList = require('../dist/VirtualList.js');
 
 function random(min, max) {
     return Math.floor((Math.random() * max) + min);
@@ -8,12 +8,13 @@ describe('renderer that calculates the items to render (and to not render)', fun
     var viewport = 1000;
     var itemHeight = 200;
     var itemCount = 20;
+    var itemBuffer = 0;
 
     it('shows items that are in the viewport', function() {
         var windowScrollY = 0;
         var offsetTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.itemsInView).toBeGreaterThan(0);
     });
@@ -22,7 +23,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 0;
         var offsetTop = 1000;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
         
         expect(result.itemsInView).toBe(0);
     });
@@ -31,7 +32,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 4000;
         var offsetTop = 0;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
         
         expect(result.itemsInView).toBe(0);
     });
@@ -40,7 +41,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 0;
         var offsetTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(0);
@@ -51,7 +52,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 3000;
         var offsetTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(15);
@@ -62,7 +63,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 100;
         var offsetTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.itemsInView).toBe(6);
     });
@@ -71,7 +72,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 0;
         var offsetTop = viewport / 2;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(3);
@@ -81,7 +82,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 3500;
         var offsetTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
    
         expect(result.firstItemIndex).toBe(17);
         expect(result.itemsInView).toBe(3);
@@ -91,20 +92,55 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var windowScrollY = 0;
         var offsetTop = 100;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, 4);
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, 4, 0);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(4);
         expect(result.lastItemIndex).toBe(3);
     });
-     
+
+    it('shows items that are in the viewport and buffer', function() {
+        var windowScrollY = 0;
+        var offsetTop = 0;
+
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
+   
+        expect(result.itemsInView).toBeGreaterThan(5);
+    });
+
+    it('does not show items after the viewport, beyond the buffer', function() {
+        var windowScrollY = 0;
+        var offsetTop = 1000;
+        
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
+        
+        expect(result.itemsInView).toBe(5);
+    });
+
+    it('does not show items before the viewport, beyond the buffer', function() {
+        var windowScrollY = 4000;
+        var offsetTop = 0;
+        
+        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
+        
+        expect(result.itemsInView).toBe(5);
+    });
+
+    it('shows items before and after the viewport, in the buffer', function() {
+        var windowScrollY = 4000;
+        var offsetTop = 0;
+        
+        var result = new VirtualList.getItems(1000, viewport, 0, itemHeight, itemCount, 5);
+
+        expect(result.itemsInView).toBe(15);
+    });     
     
     it('performs well', function() {
         var count = 1000000;
         var start = Date.now();
         
         for (var i=0;i<count;i++) {
-            var result = new VirtualList.getItems(random(0, 1000), random(0, 1000), random(0, 1000), random(0, 500), random(500, 1000));
+            var result = new VirtualList.getItems(random(0, 1000), random(0, 1000), random(0, 1000), random(0, 500), random(500, 1000), random(0, 100));
         }
         
         var end = Date.now();
