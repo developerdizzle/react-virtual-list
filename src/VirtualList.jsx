@@ -68,8 +68,6 @@ var VirtualList = React.createClass({
         return !equal;
     },
     componentWillReceiveProps: function(nextProps) {
-        console.log('componentWillReceiveProps');
-        
         var state = this.getVirtualState(nextProps);
 
         this.props.container.removeEventListener('scroll', this.onScrollDebounced);
@@ -81,8 +79,6 @@ var VirtualList = React.createClass({
         this.setState(state);
     },
     componentWillMount: function() {
-        console.log('componentWillMount', this.props);
-        
         this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
     },
     componentDidMount: function() {
