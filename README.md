@@ -40,6 +40,10 @@ var VirtualList = require('react-virtual-list');
  
 Any other properties set on `VirtualList`, such as `className`, will be reflected on the component's root element.
 
+#### Functions
+
+* `visibleItems` the currently visible array of items.  Can be used to figure out which items are in the viewport.  Eg: `var items = this.refs.list.visibleItems()` 
+
 #### Example Usage
 
 Check out [https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx](https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx) for the example used in the demo.
