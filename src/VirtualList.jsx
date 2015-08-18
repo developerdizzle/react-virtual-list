@@ -98,6 +98,10 @@ var VirtualList = React.createClass({
         
         this.setState(state);
     },
+    // in case you need to get the currently visible items
+    visibleItems: function() {
+        return this.state.items;
+    },
     render: function() {
         return (
         <this.props.tagName {...this.props} style={{boxSizing: 'border-box', height: this.state.height, paddingTop: this.state.bufferStart }} >
