@@ -51,3 +51,8 @@ Check out [https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/A
 ## Tests
 
 Use `npm test` to run the tests using [jasmine-node](https://github.com/mhevery/jasmine-node).  Currently only the math calculations are tested.  Hoping to add some DOM tests as well.
+
+## To Do
+
+* ES6/2015
+* [Known issue with mobile scroll event](https://github.com/developerdizzle/react-virtual-list/issues/1)
