@@ -19,7 +19,7 @@ $ npm install react-virtual-list --save
 The `./dist/VirtualList.js` module exports a single React component.
 
 ```
-var VirtualList = require('./node_modules/react-virtual-list/dist/VirtualList.js');
+var VirtualList = require('react-virtual-list');
 ```
 
 #### JSX

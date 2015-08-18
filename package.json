@@ -2,7 +2,7 @@
   "name": "react-virtual-list",
   "version": "1.4.1",
   "description": "Super simple virtualized list React component",
-  "main": "dist/virtual-list.js",
+  "main": "dist/VirtualList.js",
   "directories": {
     "test": "test"
   },
