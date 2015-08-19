@@ -20,6 +20,20 @@ function topFromWindow(element) {
     return element.offsetTop + topFromWindow(element.offsetParent);
 }
 
+function viewTop(element) {
+    var viewTop;
+    if (element === window) {
+        viewTop = window.pageYOffset;
+        if (viewTop == null) viewTop = document.documentElement.scrollTop;
+        if (viewTop == null) viewTop = document.body.scrollTop;
+    }
+    else {
+        viewTop = element.scrollY;
+        if (viewTop == null) viewTop = element.scrollTop;
+    }
+    return (viewTop == null) ? 0 : viewTop;
+}
+
 function debounce(func, wait, immediate) {
     if (!wait) return func;
     
@@ -47,5 +61,6 @@ module.exports = {
     areArraysEqual: areArraysEqual,
     topDifference: topDifference,
     topFromWindow: topFromWindow,
+    viewTop: viewTop,
     debounce: debounce
 };
