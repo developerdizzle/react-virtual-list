@@ -3,21 +3,22 @@ var utils = require('./utils');
 
 var VirtualList = React.createClass({
     propTypes: {
-        items: React.PropTypes.array.isRequired,
-        initialVisibleItemCount: React.PropTypes.number,
-        itemHeight: React.PropTypes.number.isRequired,
-        renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
-        tagName: React.PropTypes.string.isRequired,
-        scrollDelay: React.PropTypes.number,
-        itemBuffer: React.PropTypes.number
+        initialVisibleItems: React.PropTypes.number.isRequired,
+        itemBuffer: React.PropTypes.number.isRequired,
+        itemHeight: React.PropTypes.number.isRequired,
+        items: React.PropTypes.array.isRequired,
+        renderItem: React.PropTypes.func.isRequired,
+        scrollDelay: React.PropTypes.number.isRequired,
+        tagName: React.PropTypes.string.isRequired
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
-            tagName: 'div',
+            initialVisibleItems: 0,
+            itemBuffer: 0,
             scrollDelay: 0,
-            itemBuffer: 0
+            tagName: 'div'
         };
     },
     getInitialState: function() {
