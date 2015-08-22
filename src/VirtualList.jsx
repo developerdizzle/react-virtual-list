@@ -4,6 +4,7 @@ var utils = require('./utils');
 var VirtualList = React.createClass({
     propTypes: {
         items: React.PropTypes.array.isRequired,
+        initialVisibleItemCount: React.PropTypes.number,
         itemHeight: React.PropTypes.number.isRequired,
         renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
@@ -19,6 +20,9 @@ var VirtualList = React.createClass({
             itemBuffer: 0
         };
     },
+    getInitialState: function() {
+        return this.getVirtualState(this.props);
+    },
     getVirtualState: function(props) {
         // default values
         var state = {
@@ -28,11 +32,16 @@ var VirtualList = React.createClass({
         };
         
         // early return if nothing to render
-        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || !this.isMounted()) return state;
-        
-        var items = props.items;
-        
+        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
+
         state.height = props.items.length * props.itemHeight;
+
+        // server-side rendering
+        if (!this.isMounted()) {
+            state.items = props.items.slice(0, props.initialVisibleItemCount);
+
+            return state;
+        }
 
         var container = props.container;
 
@@ -47,18 +56,15 @@ var VirtualList = React.createClass({
 
         var viewTop = utils.viewTop(container);
 
-        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, items.length, props.itemBuffer);
+        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, props.items.length, props.itemBuffer);
         
         // no items to render
         if (renderStats.itemsInView.length === 0) return state;
 
-        state.items = items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
+        state.items = props.items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
         state.bufferStart = renderStats.firstItemIndex * props.itemHeight;
         
         return state;
-    },
-    getInitialState: function() {
-        return this.getVirtualState(this.props);
     },
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.bufferStart !== nextState.bufferStart) return true;
