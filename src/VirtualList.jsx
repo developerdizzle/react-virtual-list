@@ -89,14 +89,12 @@ var VirtualList = React.createClass({
         
         this.setState(state);
     },
-    componentWillMount: function() {
-        this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
-    },
     componentDidMount: function() {
         var state = this.getVirtualState(this.props);
-        
+
         this.setState(state);
-        
+
+        this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
         this.props.container.addEventListener('scroll', this.onScrollDebounced);
     },
     componentWillUnmount: function() {
