@@ -3,25 +3,30 @@ var utils = require('./utils');
 
 var VirtualList = React.createClass({
     propTypes: {
-        items: React.PropTypes.array.isRequired,
-        initialVisibleItemCount: React.PropTypes.number,
-        itemHeight: React.PropTypes.number.isRequired,
-        renderItem: React.PropTypes.func.isRequired,
         container: React.PropTypes.object.isRequired,
-        tagName: React.PropTypes.string.isRequired,
-        scrollDelay: React.PropTypes.number,
-        itemBuffer: React.PropTypes.number
+        initialVisibleItems: React.PropTypes.number.isRequired,
+        itemBuffer: React.PropTypes.number.isRequired,
+        itemHeight: React.PropTypes.number.isRequired,
+        items: React.PropTypes.array.isRequired,
+        renderItem: React.PropTypes.func.isRequired,
+        scrollDelay: React.PropTypes.number.isRequired,
+        tagName: React.PropTypes.string.isRequired
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
-            tagName: 'div',
+            initialVisibleItems: 0,
+            itemBuffer: 0,
             scrollDelay: 0,
-            itemBuffer: 0
+            tagName: 'div'
         };
     },
     getInitialState: function() {
-        return this.getVirtualState(this.props);
+        return {
+            items: this.props.items.slice(0, this.props.initialVisibleItems),
+            bufferStart: 0,
+            height: 0
+        };
     },
     getVirtualState: function(props) {
         // default values
@@ -30,39 +35,35 @@ var VirtualList = React.createClass({
             bufferStart: 0,
             height: 0
         };
-        
-        // early return if nothing to render
-        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
-
-        state.height = props.items.length * props.itemHeight;
-
-        // server-side rendering
-        if (!this.isMounted()) {
-            state.items = props.items.slice(0, props.initialVisibleItemCount);
-
-            return state;
-        }
 
         var container = props.container;
+        var items = props.items;
+        var itemHeight = props.itemHeight;
+        var itemBuffer = props.itemBuffer;
+
+        // early return if nothing to render
+        if (typeof container === 'undefined' || items.length === 0 || itemHeight <= 0) return state;
+
+        state.height = items.length * itemHeight;
 
         var viewHeight = typeof container.innerHeight !== 'undefined' ? container.innerHeight : container.clientHeight;
         
         // no space to render
         if (viewHeight <= 0) return state;
         
-        var list = this.getDOMNode();
+        var list = React.findDOMNode(this);
 
         var offsetTop = utils.topDifference(list, container);
 
         var viewTop = utils.viewTop(container);
 
-        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, props.items.length, props.itemBuffer);
+        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, itemHeight, items.length, itemBuffer);
         
         // no items to render
         if (renderStats.itemsInView.length === 0) return state;
 
-        state.items = props.items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
-        state.bufferStart = renderStats.firstItemIndex * props.itemHeight;
+        state.items = items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
+        state.bufferStart = renderStats.firstItemIndex * itemHeight;
         
         return state;
     },
@@ -78,22 +79,22 @@ var VirtualList = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         var state = this.getVirtualState(nextProps);
 
-        this.props.container.removeEventListener('scroll', this.onScrollDebounced);
+        if (this.props.scrollDelay !== nextProps.scrollDelay) {
+            this.props.container.removeEventListener('scroll', this.onScrollDebounced);
 
-        this.onScrollDebounced = utils.debounce(this.onScroll, nextProps.scrollDelay, false);
+            this.onScrollDebounced = utils.debounce(this.onScroll, nextProps.scrollDelay, false);
 
-        nextProps.container.addEventListener('scroll', this.onScrollDebounced);
+            nextProps.container.addEventListener('scroll', this.onScrollDebounced);
+        }
         
         this.setState(state);
-    },
-    componentWillMount: function() {
-        this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
     },
     componentDidMount: function() {
         var state = this.getVirtualState(this.props);
-        
+
         this.setState(state);
-        
+
+        this.onScrollDebounced = utils.debounce(this.onScroll, this.props.scrollDelay, false);
         this.props.container.addEventListener('scroll', this.onScrollDebounced);
     },
     componentWillUnmount: function() {
