@@ -45,7 +45,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
 
         var offsetTop = utils.topDifference(list, container);
 
-        var viewTop = typeof container.scrollY !== 'undefined' ? container.scrollY : container.scrollTop;
+        var viewTop = utils.viewTop(container);
 
         var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, items.length, props.itemBuffer);
         
