@@ -37,11 +37,14 @@ var VirtualList = React.createClass({
         };
 
         var container = props.container;
+        var items = props.items;
+        var itemHeight = props.itemHeight;
+        var itemBuffer = props.itemBuffer;
 
         // early return if nothing to render
-        if (typeof container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
+        if (typeof container === 'undefined' || items.length === 0 || itemHeight <= 0) return state;
 
-        state.height = props.items.length * props.itemHeight;
+        state.height = items.length * itemHeight;
 
         var viewHeight = typeof container.innerHeight !== 'undefined' ? container.innerHeight : container.clientHeight;
         
@@ -54,13 +57,13 @@ var VirtualList = React.createClass({
 
         var viewTop = utils.viewTop(container);
 
-        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, props.itemHeight, props.items.length, props.itemBuffer);
+        var renderStats = VirtualList.getItems(viewTop, viewHeight, offsetTop, itemHeight, items.length, itemBuffer);
         
         // no items to render
         if (renderStats.itemsInView.length === 0) return state;
 
-        state.items = props.items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
-        state.bufferStart = renderStats.firstItemIndex * props.itemHeight;
+        state.items = items.slice(renderStats.firstItemIndex, renderStats.lastItemIndex + 1);
+        state.bufferStart = renderStats.firstItemIndex * itemHeight;
         
         return state;
     },
