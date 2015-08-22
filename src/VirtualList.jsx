@@ -22,7 +22,11 @@ var VirtualList = React.createClass({
         };
     },
     getInitialState: function() {
-        return this.getVirtualState(this.props);
+        return {
+            items: this.props.items.slice(0, this.props.initialVisibleItems),
+            bufferStart: 0,
+            height: 0
+        };
     },
     getVirtualState: function(props) {
         // default values
@@ -36,13 +40,6 @@ var VirtualList = React.createClass({
         if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
 
         state.height = props.items.length * props.itemHeight;
-
-        // server-side rendering
-        if (!this.isMounted()) {
-            state.items = props.items.slice(0, props.initialVisibleItemCount);
-
-            return state;
-        }
 
         var container = props.container;
 
