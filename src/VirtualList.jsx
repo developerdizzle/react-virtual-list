@@ -35,13 +35,13 @@ var VirtualList = React.createClass({
             bufferStart: 0,
             height: 0
         };
-        
-        // early return if nothing to render
-        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
-
-        state.height = props.items.length * props.itemHeight;
 
         var container = props.container;
+
+        // early return if nothing to render
+        if (typeof container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0) return state;
+
+        state.height = props.items.length * props.itemHeight;
 
         var viewHeight = typeof container.innerHeight !== 'undefined' ? container.innerHeight : container.clientHeight;
         
