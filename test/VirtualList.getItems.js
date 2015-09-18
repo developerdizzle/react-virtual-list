@@ -1,136 +1,318 @@
-VirtualList = require('../dist/VirtualList.js');
+var VirtualList = require('../dist/VirtualList.js');
 
 function random(min, max) {
     return Math.floor((Math.random() * max) + min);
 }
 
 describe('renderer that calculates the items to render (and to not render)', function() {
-    var viewport = 1000;
+    var viewHeight = 1000;
     var itemHeight = 200;
     var itemCount = 20;
     var itemBuffer = 0;
+    
+    it('shows items that are in the viewHeight', function() {
+        var viewTop = 0;
+        var listTop = 0;
 
-    it('shows items that are in the viewport', function() {
-        var windowScrollY = 0;
-        var offsetTop = 0;
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
    
         expect(result.itemsInView).toBeGreaterThan(0);
     });
 
-    it('does not show items after the viewport', function() {
-        var windowScrollY = 0;
-        var offsetTop = 1000;
+    it('does not show items after the viewHeight', function() {
+        var viewTop = 0;
+        var listTop = 1000;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
         
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+
         expect(result.itemsInView).toBe(0);
     });
 
-    it('does not show items before the viewport', function() {
-        var windowScrollY = 4000;
-        var offsetTop = 0;
+    it('does not show items before the viewHeight', function() {
+        var viewTop = 4000;
+        var listTop = 0;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
         
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+
         expect(result.itemsInView).toBe(0);
     });
 
-    it('shows the first 5 items at the top of the viewport', function() {
-        var windowScrollY = 0;
-        var offsetTop = 0;
+    it('shows the first 5 items at the top of the viewHeight', function() {
+        var viewTop = 0;
+        var listTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(0);
         expect(result.lastItemIndex).toBe(4);
     });
 
-    it('shows the last 5 items at the bottom of the viewport', function() {
-        var windowScrollY = 3000;
-        var offsetTop = 0;
+    it('shows the last 5 items at the bottom of the viewHeight', function() {
+        var viewTop = 3000;
+        var listTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(15);
         expect(result.lastItemIndex).toBe(19);
     });
 
-    it('shows 6 items if the viewport starts in the middle of an item', function() {
-        var windowScrollY = 100;
-        var offsetTop = 0;
+    it('shows 6 items if the viewHeight starts in the middle of an item', function() {
+        var viewTop = 100;
+        var listTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
    
         expect(result.itemsInView).toBe(6);
     });
 
     it('shows the first 3 (2.5 items) if the list starts halfway down the page', function() {
-        var windowScrollY = 0;
-        var offsetTop = viewport / 2;
+        var viewTop = 0;
+        var listTop = viewHeight / 2;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(3);
     });
 
-    it('shows the last 3 (2.5 items) if the viewport is scrolled 500px past the bottom of the list', function() {
-        var windowScrollY = 3500;
-        var offsetTop = 0;
+    it('shows the last 3 (2.5 items) if the viewHeight is scrolled 500px past the bottom of the list', function() {
+        var viewTop = 3500;
+        var listTop = 0;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 0);
-   
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        
         expect(result.firstItemIndex).toBe(17);
         expect(result.itemsInView).toBe(3);
     });
 
     it('shows all items if the list is smaller than the viewbox', function() {
-        var windowScrollY = 0;
-        var offsetTop = 100;
+        var viewTop = 0;
+        var listTop = 100;
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, 4, 0);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, 4);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(4);
         expect(result.lastItemIndex).toBe(3);
     });
 
-    it('shows items that are in the viewport and buffer', function() {
-        var windowScrollY = 0;
-        var offsetTop = 0;
+    it('shows items that are in the viewHeight and buffer', function() {
+        var viewTop = 0;
+        var listTop = 0;
+        
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
 
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
-   
+        var result = new VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+
         expect(result.itemsInView).toBeGreaterThan(5);
     });
 
-    it('does not show items after the viewport, beyond the buffer', function() {
-        var windowScrollY = 0;
-        var offsetTop = 1000;
+    it('does not show items after the viewHeight, beyond the buffer', function() {
+        var viewTop = 0;
+        var listTop = 1000;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
+        var listHeight = itemCount * itemHeight;
         
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+
         expect(result.itemsInView).toBe(5);
     });
 
-    it('does not show items before the viewport, beyond the buffer', function() {
-        var windowScrollY = 4000;
-        var offsetTop = 0;
+    it('does not show items before the viewHeight, beyond the buffer', function() {
+        var viewTop = 4000;
+        var listTop = 0;
         
-        var result = new VirtualList.getItems(windowScrollY, viewport, offsetTop, itemHeight, itemCount, 5);
+        var listHeight = itemCount * itemHeight;
         
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+
         expect(result.itemsInView).toBe(5);
     });
 
-    it('shows items before and after the viewport, in the buffer', function() {
-        var windowScrollY = 4000;
-        var offsetTop = 0;
+    it('shows items before and after the viewHeight, in the buffer', function() {
+        var viewTop = 1000;
+        var listTop = 0;
         
-        var result = new VirtualList.getItems(1000, viewport, 0, itemHeight, itemCount, 5);
+        var listHeight = itemCount * itemHeight;
+        
+        var listBox = {
+            top: listTop,
+            height: listHeight,
+            bottom: listTop + listHeight
+        };
+        
+        var viewBox = {
+            top: viewTop,
+            height: viewHeight,
+            bottom: viewTop + viewHeight
+        };
+
+        var result = new VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
 
         expect(result.itemsInView).toBe(15);
     });     
@@ -140,13 +322,33 @@ describe('renderer that calculates the items to render (and to not render)', fun
         var start = Date.now();
         
         for (var i=0;i<count;i++) {
-            var result = new VirtualList.getItems(random(0, 1000), random(0, 1000), random(0, 1000), random(0, 500), random(500, 1000), random(0, 100));
+            var itemHeight = random(0, 500);
+            var itemCount = random(500, 1000);
+            var itemBuffer = random(0, 100);
+            
+            var viewTop = random(0, 1000);
+            var viewHeight = random(0, 1000);
+            var listTop = random(0, 1000);
+            
+            var listHeight = itemCount * itemHeight;
+
+            var listBox = {
+                top: listTop,
+                height: listHeight,
+                bottom: listTop + listHeight
+            };
+            
+            var viewBox = {
+                top: viewTop,
+                height: viewHeight,
+                bottom: viewTop + viewHeight
+            };
+
+            var result = new VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
         }
         
         var end = Date.now();
         var duration = end - start;
-        
-        // console.log('new VirtualRenderer().getItems ran %d iterations in %d ms', count, end - start);
         
         expect(duration).toBeLessThan(1000);
     });
