@@ -319,7 +319,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
     
     it('performs well', function() {
         var count = 1000000;
-        var start = Date.now();
+        var totalDuration = 0;
         
         for (var i=0;i<count;i++) {
             var itemHeight = random(0, 500);
@@ -344,12 +344,18 @@ describe('renderer that calculates the items to render (and to not render)', fun
                 bottom: viewTop + viewHeight
             };
 
+            var start = Date.now();
+            
             var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+            
+            var end = Date.now();
+            
+            var duration = end - start;
+            totalDuration += duration;
         }
         
-        var end = Date.now();
-        var duration = end - start;
+        var averageDuration = totalDuration / count;
         
-        expect(duration).toBeLessThan(1000);
+        expect(averageDuration).toBeLessThan(16);
     });
 });
