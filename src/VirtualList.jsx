@@ -41,7 +41,7 @@ var VirtualList = React.createClass({
         // no space to render
         if (viewHeight <= 0) return state;
         
-        var list = this.getDOMNode();
+        var list = React.findDOMNode(this);
 
         var offsetTop = utils.topDifference(list, container);
 
