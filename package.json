@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/developerdizzle/react-virtual-list",
   "dependencies": {
-    "react": "^0.13.3"
+    "react": "~0.13.x"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
