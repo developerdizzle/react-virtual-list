@@ -101,7 +101,7 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         this.onScrollDebounced = utils.debounce(this.onScroll, nextProps.scrollDelay, false);
         
         nextProps.container.addEventListener('scroll', this.onScrollDebounced);
-        
+
         this.setState(state);
     },
     componentWillMount: function() {
@@ -163,7 +163,6 @@ VirtualList.getItems = function(viewBox, listBox, itemBuffer, itemHeight, itemCo
     
     var listViewBox = VirtualList.getBox(viewBox, listBox);
     
-    //todo add itemBuffer here instead
     var firstItemIndex = Math.max(0,  Math.floor(listViewBox.top / itemHeight) - itemBuffer);
     var lastItemIndex = Math.min(itemCount, Math.ceil(listViewBox.bottom / itemHeight) + itemBuffer) - 1;
     
@@ -174,8 +173,6 @@ VirtualList.getItems = function(viewBox, listBox, itemBuffer, itemHeight, itemCo
         lastItemIndex: lastItemIndex,
         itemsInView: itemsInView,
     };
-    
-    //console.log('getItems.result', result);
     
     return result;
 };
