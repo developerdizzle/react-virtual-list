@@ -44,7 +44,7 @@ var VirtualList = React.createClass({
         
         var listBox = this.listBox(props);
 
-        var renderStats = VirtualList.getItems(viewBox, listBox, props.itemHeight, items.length, props.itemBuffer);
+        var renderStats = VirtualList.getItems(viewBox, listBox, props.itemBuffer, props.itemHeight, items.length);
         
         // no items to render
         if (renderStats.itemsInView.length === 0) return state;
@@ -67,7 +67,7 @@ var VirtualList = React.createClass({
         return !equal;
     },
     viewBox: function viweBox(nextProps) {
-        return (this.view = this.view || this._getViewBox);
+        return (this.view = this.view || this._getViewBox(nextProps));
     },
     _getViewBox: function _getViewBox(nextProps) {
         return {
