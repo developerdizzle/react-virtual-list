@@ -66,8 +66,8 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         
         return !equal;
     },
-    viewBox: function viweBox(nextProps) {
-        return (this.view = this.view || this._getViewBox);
+    viewBox: function viewBox(nextProps) {
+        return (this.view = this.view || this._getViewBox(nextProps));
     },
     _getViewBox: function _getViewBox(nextProps) {
         return {
@@ -146,7 +146,7 @@ VirtualList.getBox = function getBox(view, list) {
     };
 };
 
-VirtualList.getItems = function(viewBox, listBox, itemBuffer, itemHeight, itemCount) {
+VirtualList.getItems = function(viewBox, listBox, itemHeight, itemCount, itemBuffer) {
     if (itemCount === 0 || itemHeight === 0) return {
         itemsInView: 0
     };
