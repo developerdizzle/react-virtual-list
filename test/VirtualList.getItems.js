@@ -28,7 +28,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
    
         expect(result.itemsInView).toBeGreaterThan(0);
     });
@@ -51,7 +51,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
 
         expect(result.itemsInView).toBe(0);
     });
@@ -74,7 +74,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
 
         expect(result.itemsInView).toBe(0);
     });
@@ -97,7 +97,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(0);
@@ -122,7 +122,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
    
         expect(result.itemsInView).toBe(5);
         expect(result.firstItemIndex).toBe(15);
@@ -147,7 +147,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
    
         expect(result.itemsInView).toBe(6);
     });
@@ -170,7 +170,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(3);
@@ -194,7 +194,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
         
         expect(result.firstItemIndex).toBe(17);
         expect(result.itemsInView).toBe(3);
@@ -218,7 +218,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, 4);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, 4, itemBuffer);
    
         expect(result.firstItemIndex).toBe(0);
         expect(result.itemsInView).toBe(4);
@@ -243,7 +243,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, 5);
 
         expect(result.itemsInView).toBeGreaterThan(5);
     });
@@ -266,7 +266,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, 5);
 
         expect(result.itemsInView).toBe(5);
     });
@@ -289,7 +289,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, 5);
 
         expect(result.itemsInView).toBe(5);
     });
@@ -312,7 +312,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
             bottom: viewTop + viewHeight
         };
 
-        var result = VirtualList.getItems(viewBox, listBox, 5, itemHeight, itemCount);
+        var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, 5);
 
         expect(result.itemsInView).toBe(15);
     });     
@@ -346,7 +346,7 @@ describe('renderer that calculates the items to render (and to not render)', fun
 
             var start = Date.now();
             
-            var result = VirtualList.getItems(viewBox, listBox, itemBuffer, itemHeight, itemCount);
+            var result = VirtualList.getItems(viewBox, listBox, itemHeight, itemCount, itemBuffer);
             
             var end = Date.now();
             
