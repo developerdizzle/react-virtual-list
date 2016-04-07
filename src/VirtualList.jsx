@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var utils = require('./utils');
 
 var VirtualList = React.createClass({
@@ -19,7 +20,7 @@ var VirtualList = React.createClass({
             itemBuffer: 0
         };
     },
-    getVirtualState: function(props) {
+    getVirtualState: function(props, forced) {
         // default values
         var state = {
             items: [],
@@ -28,7 +29,7 @@ var VirtualList = React.createClass({
         };
         
         // early return if nothing to render
-        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || !this.isMounted()) return state;
+        if (typeof props.container === 'undefined' || props.items.length === 0 || props.itemHeight <= 0 || forced || !this.isMounted()) return state;
         
         var items = props.items;
         
@@ -55,7 +56,7 @@ var VirtualList = React.createClass({
         return state;
     },
     getInitialState: function() {
-        return this.getVirtualState(this.props);
+        return this.getVirtualState(this.props, true);
     },
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.bufferStart !== nextState.bufferStart) return true;
@@ -75,7 +76,7 @@ var VirtualList = React.createClass({
         };
     },
     _getListBox: function(nextProps) {
-        var list = this.getDOMNode();
+        var list = ReactDOM.findDOMNode(this);
 
         var top = utils.topDifference(list, nextProps.container);
         
