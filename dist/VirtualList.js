@@ -9,14 +9,16 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         container: React.PropTypes.object.isRequired,
         tagName: React.PropTypes.string.isRequired,
         scrollDelay: React.PropTypes.number,
-        itemBuffer: React.PropTypes.number
+        itemBuffer: React.PropTypes.number,
+        initialItems: React.PropTypes.array.isRequired
     },
     getDefaultProps: function() {
         return {
             container: typeof window !== 'undefined' ? window : undefined,
             tagName: 'div',
             scrollDelay: 0,
-            itemBuffer: 0
+            itemBuffer: 0,
+            initialItems: []
         };
     },
     getVirtualState: function(props) {
@@ -54,8 +56,13 @@ var VirtualList = React.createClass({displayName: "VirtualList",
         
         return state;
     },
-    getInitialState: function() {
-        return this.getVirtualState(this.props);
+    getInitialState: function () {
+        var items = this.props.initialItems;
+        return {
+            items: items,
+            bufferStart: 0,
+            height: items.length * this.props.itemHeight
+        };
     },
     shouldComponentUpdate: function(nextProps, nextState) {
         if (this.state.bufferStart !== nextState.bufferStart) return true;

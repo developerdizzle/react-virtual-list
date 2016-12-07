@@ -37,6 +37,7 @@ var VirtualList = require('react-virtual-list');
 * `tagName` the tagName for the root element that surrounds the items rendered by renderItem.  Defaults to `div`.  Use this if you want to render a list with `ul` and `li`, or any other elements.
 * `scrollDelay` the delay in milliseconds after scroll to recalculate.  Defaults to `0`.  Can be used to throttle recalculation.
 * `itemBuffer` the number of items that should be rendered before and after the visible viewport.  Defaults to `0`.
+* `initialItems` an array of list items that should be rendered initially and on the server.  Defaults to `[]`.
  
 Any other properties set on `VirtualList`, such as `className`, will be reflected on the component's root element.
 
