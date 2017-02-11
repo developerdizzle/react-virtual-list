@@ -1,58 +1,102 @@
 # [react-virtual-list](http://developerdizzle.github.io/react-virtual-list/) [![Build Status](https://travis-ci.org/developerdizzle/react-virtual-list.svg?branch=master)](https://travis-ci.org/developerdizzle/react-virtual-list)
 
-Super simple virtualized list [React](https://github.com/facebook/react) component
+Super simple virtualized list [higher-order component](https://facebook.github.io/react/docs/higher-order-components.html) for [React](https://github.com/facebook/react) version `^15.0.0`.
 
 [Check out the demo here](http://developerdizzle.github.io/react-virtual-list)
 
-This React component allows you to display a large list of fixed-height items in your document, while only rendering the items visible in the viewport.  This allows a large list to be rendered with much fewer DOM elements.
+`react-virtual-list` allows you to display a large list of fixed-height items, while only rendering the items visible on the screen.  This allows a large list to be rendered with much fewer DOM elements.
+
+### Some other benefits:
+* Zero dependencies
+* Small - `~4.2k` gzipped & minified, `~4.9k` minified [http://i.imgur.com/DxRCuLv.png](http://i.imgur.com/DxRCuLv.png)
+* Decent performance - demo page almost always stays over 60fps [http://i.imgur.com/CHVCK9x.png](http://i.imgur.com/CHVCK9x.png)
+* Keeps your components separate - as a higher-order component
+* Gives you control - doesn't force any particular markup, but gives you the necessary styles and data to use.
+
+## Legacy
+
+If you're looking for documentation on version 1, supporting React `~0.13.x`, it's [here](README.v1.md).
 
 ## Installation
 
-You can use NPM to install react-virtual-list:
+You can use [npm](https://npmjs.org) to install [react-virtual-list](https://www.npmjs.com/package/react-virtual-list).
 
 ```console
-$ npm install react-virtual-list --save
+> npm install react-virtual-list --save
 ```
 
 ## Usage
 
-The `./dist/VirtualList.js` module exports a single React component.
+The `./lib/VirtualList.js` module exports a single, ES5-compatible, CommonJS-accessible, component factory.
 
-```
-var VirtualList = require('react-virtual-list');
+```js
+import VirtualList from 'react-virtual-list';
 ```
 
-#### JSX
+Your inner list component uses the `virtual` property to render the visible items, and set a style to set the overall list height and padding.
 
+```js
+const MyList = ({
+  virtual,
+  itemHeight,
+}) => (
+  <ul style={virtual.style}>
+    {virtual.items.map(item => (
+      <li key={`item_${item.id}`} style={{height: itemHeight}}>
+        Lorem ipsum dolor sit amet
+      </li>
+    ))}
+  </ul>
+);
 ```
-<VirtualList items={this.props.items} renderItem={this.renderItem} itemHeight={this.props.itemHeight} />
+
+**Note:** You should set [keys](https://facebook.github.io/react/docs/lists-and-keys.html) on your list items.
+
+Create the virtualized component.
+
+```js
+const MyVirtualList = VirtualList()(MyList);
 ```
+
+Write the JSX for the virtualized component with the necessary [properties](#properties).
+
+```js
+<MyVirtualList
+  items={myBigListOfItems}
+  itemHeight={100}
+/>
+```
+
+#### Options
+
+Options are used before the virtualized component can be created.  This means that if you need to change an option after the initial render, you will need to recreate the virtualized component.
+
+```js
+const options = {
+  container: this.refs.container
+};
+
+const MyVirtualList = VirtualList(options)(MyList);
+```
+
+Name | Type | Default | Description
+--- | --- | --- | ---
+`container` | DOM Element | window | Scrollable element that contains the list.  Use this if you have a list inside an element with `overflow: scroll`.
 
 #### Properties
 
-* `items` the full array of list items.  Only the visible subset of these will be rendered.
-* `renderItem` a function to render a single item, passed as argument `item`.  Must return a single React element (`React.createElement(...)`)
-* `itemHeight` the height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
-* `container` the scrollable element that contains the list.  Defaults to `window`.  Use this if you have a list inside an element with `overflow: scroll`.
-* `tagName` the tagName for the root element that surrounds the items rendered by renderItem.  Defaults to `div`.  Use this if you want to render a list with `ul` and `li`, or any other elements.
-* `scrollDelay` the delay in milliseconds after scroll to recalculate.  Defaults to `0`.  Can be used to throttle recalculation.
-* `itemBuffer` the number of items that should be rendered before and after the visible viewport.  Defaults to `0`.
- 
-Any other properties set on `VirtualList`, such as `className`, will be reflected on the component's root element.
+These properties and any others set on your virtual component, such as `className`, will be passed down to the inner component.
 
-#### Functions
-
-* `visibleItems` the currently visible array of items.  Can be used to figure out which items are in the viewport.  Eg: `var items = this.refs.list.visibleItems()` 
+Name | Type | Default | Description
+--- | --- | --- | ---
+`items` | Array | - | Full array of list items.  Only the visible subset of these will be rendered.
+`itemHeight` | Number | - | Height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
+`itemBuffer` | Number | 0 | Number of items that should be rendered before and after the visible viewport.  Try using this if you have a complex list that suffers from a bit of lag when scrolling.
 
 #### Example Usage
 
-Check out [https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx](https://github.com/developerdizzle/react-virtual-list/blob/gh-pages/App.jsx) for the example used in the demo.
+Check out [demo/src/app.js](demo/src/app.js) and [demo/src/ConfigurableExample.js](demo/src/ConfigurableExample.js) for the example used in the [demo](http://developerdizzle.github.io/react-virtual-list).
 
 ## Tests
 
-Use `npm test` to run the tests using [jasmine-node](https://github.com/mhevery/jasmine-node).  Currently only the math calculations are tested.  Hoping to add some DOM tests as well.
-
-## To Do
-
-* ES6/2015
-* [Known issue with mobile scroll event](https://github.com/developerdizzle/react-virtual-list/issues/1)
+Use `npm test` to run the tests using [Jest](https://github.com/facebook/jest).  Not everything is currently tested yet!
