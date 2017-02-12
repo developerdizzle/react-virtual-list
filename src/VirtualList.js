@@ -64,13 +64,13 @@ const VirtualList = (options) => (InnerComponent) => {
         this.setState(state);
       }
     }
-    
+
     refreshState() {
       const { itemHeight, items, itemBuffer } = this.props;
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
     };
-    
+
     componentDidMount() {
       // cache the DOM node
       this.domNode = ReactDOM.findDOMNode(this);
@@ -82,7 +82,7 @@ const VirtualList = (options) => (InnerComponent) => {
       this.options.container.addEventListener('scroll', this.refreshState);
       this.options.container.addEventListener('resize', this.refreshState);
     };
-    
+
     componentWillUnmount() {
       // remove events
       this.options.container.removeEventListener('scroll', this.refreshState);
@@ -95,7 +95,7 @@ const VirtualList = (options) => (InnerComponent) => {
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
     };
-    
+
     render() {
       const { firstItemIndex, lastItemIndex } = this.state;
       const { items, itemHeight } = this.props;
@@ -116,10 +116,12 @@ const VirtualList = (options) => (InnerComponent) => {
         },
       };
 
-      return (<InnerComponent
-        {...this.props}
-        virtual={virtual}
-      />);
+      const props = {
+        ...this.props,
+        ...options.mapVirtualToProps(virtual)
+      }
+
+      return (<InnerComponent {...props} />);
     };
   };
 };
