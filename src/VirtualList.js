@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import getVisibleItemBounds from './utils/getVisibleItemBounds';
+import throttleWithRAF from './utils/throttleWithRAF';
 
 const VirtualList = (options) => (InnerComponent) => {
   return class vlist extends PureComponent {
@@ -40,19 +41,7 @@ const VirtualList = (options) => (InnerComponent) => {
 
       // if requestAnimationFrame is available, use it to throttle refreshState
       if (window && 'requestAnimationFrame' in window) {
-        const refreshState = this.refreshState;
-
-        this.refreshState = () => {
-          if (this.isRefreshingState) return;
-
-          this.isRefreshingState = true;
-
-          window.requestAnimationFrame(() => {
-            refreshState();
-
-            this.isRefreshingState = false;
-          });
-        };
+        this.refreshState = throttleWithRAF(this.refreshState);
       }
     };
 
@@ -64,13 +53,13 @@ const VirtualList = (options) => (InnerComponent) => {
         this.setState(state);
       }
     }
-    
+
     refreshState() {
       const { itemHeight, items, itemBuffer } = this.props;
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
     };
-    
+
     componentDidMount() {
       // cache the DOM node
       this.domNode = ReactDOM.findDOMNode(this);
@@ -82,7 +71,7 @@ const VirtualList = (options) => (InnerComponent) => {
       this.options.container.addEventListener('scroll', this.refreshState);
       this.options.container.addEventListener('resize', this.refreshState);
     };
-    
+
     componentWillUnmount() {
       // remove events
       this.options.container.removeEventListener('scroll', this.refreshState);
@@ -95,7 +84,7 @@ const VirtualList = (options) => (InnerComponent) => {
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
     };
-    
+
     render() {
       const { firstItemIndex, lastItemIndex } = this.state;
       const { items, itemHeight } = this.props;
