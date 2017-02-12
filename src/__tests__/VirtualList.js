@@ -13,6 +13,8 @@ const MyList = ({ itemHeight, virtual }) => {
   );
 };
 
+const mapVirtualToProps = (virtual) => ({ virtual: virtual });
+
 const items = Array.apply(null, {length: 1000}).map(Number.call, Number);
 
 describe('higher-order component that only renders visible items', () => {
@@ -21,7 +23,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('renders the inner component', () => {
-    const MyVirtualList = VirtualList()(MyList);
+    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -38,7 +40,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('provides the virtual prop', () => {
-    const MyVirtualList = VirtualList()(MyList);
+    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -52,10 +54,10 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).not.toBe(undefined);
-  });  
+  });
 
   it('provides the items prop', () => {
-    const MyVirtualList = VirtualList()(MyList);
+    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -69,10 +71,10 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).not.toBe(undefined);
-  });  
+  });
 
   it('provides the style prop', () => {
-    const MyVirtualList = VirtualList()(MyList);
+    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -131,6 +133,7 @@ describe('higher-order component that only renders visible items', () => {
           paddingTop: 0,
         },
       },
+      mapVirtualToProps,
     };
 
     const MyVirtualList = VirtualList(options)(MyList);
