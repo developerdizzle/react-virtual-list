@@ -13,8 +13,6 @@ const MyList = ({ itemHeight, virtual }) => {
   );
 };
 
-const mapVirtualToProps = (virtual) => ({ virtual: virtual });
-
 const items = Array.apply(null, {length: 1000}).map(Number.call, Number);
 
 describe('higher-order component that only renders visible items', () => {
@@ -23,7 +21,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('renders the inner component', () => {
-    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
+    const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -40,7 +38,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('provides the virtual prop', () => {
-    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
+    const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -57,7 +55,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('provides the items prop', () => {
-    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
+    const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -74,7 +72,7 @@ describe('higher-order component that only renders visible items', () => {
   });
 
   it('provides the style prop', () => {
-    const MyVirtualList = VirtualList({ mapVirtualToProps })(MyList);
+    const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ReactTestUtils.createRenderer();
     renderer.render(
@@ -133,7 +131,6 @@ describe('higher-order component that only renders visible items', () => {
           paddingTop: 0,
         },
       },
-      mapVirtualToProps,
     };
 
     const MyVirtualList = VirtualList(options)(MyList);
@@ -144,12 +141,86 @@ describe('higher-order component that only renders visible items', () => {
       <MyVirtualList
         items={items}
         itemHeight={100}
-        />
+      />
       )
     );
 
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).toHaveLength(5);
+  });
+
+  it('does not provide mapVirtualToProps', () => {
+    const container = {
+      clientHeight: 500,
+      offsetTop: 0,
+    };
+
+    const options = {
+      container,
+      initialState: {
+        firstItemIndex: 0,
+        lastItemIndex: 4,
+        style: {
+          height: 500,
+          paddingTop: 0,
+        },
+      },
+    };
+
+    const MyVirtualList = VirtualList(options)(MyList);
+
+    const renderer = ReactTestUtils.createRenderer();
+    renderer.render(
+      (
+      <MyVirtualList
+        items={items}
+        itemHeight={100}
+      />
+      )
+    );
+
+    const result = renderer.getRenderOutput();
+
+    expect(result.props.virtual.items).toHaveLength(5);
+    expect(result.props.virtual.style).toBeDefined();
+  });
+
+  it('does provide mapVirtualToProps', () => {
+    const container = {
+      clientHeight: 500,
+      offsetTop: 0,
+    };
+
+    const options = {
+      container,
+      initialState: {
+        firstItemIndex: 0,
+        lastItemIndex: 4,
+        style: {
+          height: 500,
+          paddingTop: 0,
+        },
+      },
+    };
+
+    const mapVirtualToProps = (virtual) => ({ customItemsRef: virtual.items })
+
+    const MyVirtualList = VirtualList(options, mapVirtualToProps)(MyList);
+
+    const renderer = ReactTestUtils.createRenderer();
+    renderer.render(
+      (
+      <MyVirtualList
+        items={items}
+        itemHeight={100}
+      />
+      )
+    );
+
+    const result = renderer.getRenderOutput();
+
+    expect(result.props.virtual).toBeUndefined();
+    expect(result.props.customItemsRef).toHaveLength(5);
   });
 });

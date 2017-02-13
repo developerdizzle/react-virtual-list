@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 
 import getVisibleItemBounds from './utils/getVisibleItemBounds';
 
-const VirtualList = (options) => (InnerComponent) => {
+const defaultMapToVirtualProps = (virtual) => ({ virtual })
+
+const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (InnerComponent) => {
   return class vlist extends PureComponent {
     static propTypes = {
       items: PropTypes.array.isRequired,
@@ -118,7 +120,7 @@ const VirtualList = (options) => (InnerComponent) => {
 
       const props = {
         ...this.props,
-        ...options.mapVirtualToProps(virtual)
+        ...mapVirtualToProps(virtual)
       }
 
       return (<InnerComponent {...props} />);
