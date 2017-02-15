@@ -204,7 +204,7 @@ describe('higher-order component that only renders visible items', () => {
       },
     };
 
-    const mapVirtualToProps = (virtual) => ({ customItemsRef: virtual.items })
+    const mapVirtualToProps = ({ items }) => ({ customItemsRef: items })
 
     const MyVirtualList = VirtualList(options, mapVirtualToProps)(MyList);
 
@@ -221,6 +221,6 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).toBeUndefined();
-    expect(result.props.customItemsRef).toHaveLength(5);
+    expect(result.props.customItemsRef).toHaveLength(1000);
   });
 });
