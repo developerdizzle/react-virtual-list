@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import getVisibleItemBounds from './utils/getVisibleItemBounds';
+import throttleWithRAF from './utils/throttleWithRAF';
 
 const defaultMapToVirtualProps = ({
   items,
@@ -66,19 +67,7 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
 
       // if requestAnimationFrame is available, use it to throttle refreshState
       if (window && 'requestAnimationFrame' in window) {
-        const refreshState = this.refreshState;
-
-        this.refreshState = () => {
-          if (this.isRefreshingState) return;
-
-          this.isRefreshingState = true;
-
-          window.requestAnimationFrame(() => {
-            refreshState();
-
-            this.isRefreshingState = false;
-          });
-        };
+        this.refreshState = throttleWithRAF(this.refreshState);
       }
     };
 
