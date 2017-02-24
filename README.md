@@ -73,7 +73,11 @@ Options are used before the virtualized component can be created.  This means th
 
 ```js
 const options = {
-  container: this.refs.container
+  container: this.refs.container, // use this scrollable element as a container
+  initialState: {
+    firstItemIndex: 0, // show first ten items
+    lastItemIndex: 9,  // during initial render
+  },
 };
 
 const MyVirtualList = VirtualList(options)(MyList);
@@ -82,6 +86,7 @@ const MyVirtualList = VirtualList(options)(MyList);
 Name | Type | Default | Description
 --- | --- | --- | ---
 `container` | DOM Element | window | Scrollable element that contains the list.  Use this if you have a list inside an element with `overflow: scroll`.
+`initialState` | object | - | An object with `firstItemIndex` and `lastItemIndex` properties, which represent array indexes of `items` (see below).  These are used to calculate the visible items before the component is mounted.  Useful for server-side rendering.
 
 #### Properties
 
