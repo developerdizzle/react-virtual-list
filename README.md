@@ -93,6 +93,17 @@ Name | Type | Default | Description
 `itemHeight` | Number | - | Height in pixels of a single item.  **You must have a CSS rule that sets the height of each list item to this value.**
 `itemBuffer` | Number | 0 | Number of items that should be rendered before and after the visible viewport.  Try using this if you have a complex list that suffers from a bit of lag when scrolling.
 
+#### Mapping
+
+`VirtualList` allows a second, optional, parameter, named `mapVirtualToProps`, which functions similarly to [Redux's `mapStateToProps`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options).  This function can be provided to change the properties passed to `MyList`.  Its arguments are:
+
+Name | Description
+--- | ---
+`props` | Includes all properties passed to `MyVirtualList`
+`state` | Includes `firstItemIndex` and `lastItemIndex`; array indexes of the visible bounds of `items`
+
+The default `mapVirtualToProps` can be found [here](/src/utils/defaultMapVirtualToProps.js).
+
 #### Example Usage
 
 Check out [demo/src/app.js](demo/src/app.js) and [demo/src/ConfigurableExample.js](demo/src/ConfigurableExample.js) for the example used in the [demo](http://developerdizzle.github.io/react-virtual-list).

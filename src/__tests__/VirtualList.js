@@ -150,7 +150,7 @@ describe('higher-order component that only renders visible items', () => {
     expect(result.props.virtual.items).toHaveLength(5);
   });
 
-  it('does not provide mapVirtualToProps', () => {
+  it('has default mapVirtualToProps', () => {
     const container = {
       clientHeight: 500,
       offsetTop: 0,
@@ -161,10 +161,6 @@ describe('higher-order component that only renders visible items', () => {
       initialState: {
         firstItemIndex: 0,
         lastItemIndex: 4,
-        style: {
-          height: 500,
-          paddingTop: 0,
-        },
       },
     };
 
@@ -182,11 +178,10 @@ describe('higher-order component that only renders visible items', () => {
 
     const result = renderer.getRenderOutput();
 
-    expect(result.props.virtual.items).toHaveLength(5);
-    expect(result.props.virtual.style).toBeDefined();
+    expect(result.props.virtual).toBeDefined();
   });
 
-  it('does provide mapVirtualToProps', () => {
+  it('allows custom mapVirtualToProps', () => {
     const container = {
       clientHeight: 500,
       offsetTop: 0,
@@ -197,10 +192,6 @@ describe('higher-order component that only renders visible items', () => {
       initialState: {
         firstItemIndex: 0,
         lastItemIndex: 4,
-        style: {
-          height: 500,
-          paddingTop: 0,
-        },
       },
     };
 
@@ -221,6 +212,6 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).toBeUndefined();
-    expect(result.props.customItemsRef).toHaveLength(1000);
+    expect(result.props.customItemsRef).toBeDefined();
   });
 });
