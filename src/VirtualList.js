@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 
 import getVisibleItemBounds from './utils/getVisibleItemBounds';
 import throttleWithRAF from './utils/throttleWithRAF';
+import defaultMapToVirtualProps from './utils/defaultMapVirtualToProps';
 
-const VirtualList = (options) => (InnerComponent) => {
+const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (InnerComponent) => {
   return class vlist extends PureComponent {
     static propTypes = {
       items: PropTypes.array.isRequired,
@@ -86,29 +87,7 @@ const VirtualList = (options) => (InnerComponent) => {
     };
 
     render() {
-      const { firstItemIndex, lastItemIndex } = this.state;
-      const { items, itemHeight } = this.props;
-
-      const visibleItems = lastItemIndex > -1 ? items.slice(firstItemIndex, lastItemIndex + 1) : [];
-      // would be nice to make this not break shallowCompare with items.slice
-      // but theoretically we're only rendering if we need to
-
-      // style
-      const height = items.length * itemHeight;
-      const paddingTop = firstItemIndex * itemHeight;
-
-      const virtual = {
-        items: visibleItems,
-        style: {
-          height,
-          paddingTop,
-        },
-      };
-
-      return (<InnerComponent
-        {...this.props}
-        virtual={virtual}
-      />);
+      return (<InnerComponent {...this.props} {...mapVirtualToProps(this.props, this.state)} />);
     };
   };
 };

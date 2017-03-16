@@ -52,7 +52,7 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).not.toBe(undefined);
-  });  
+  });
 
   it('provides the items prop', () => {
     const MyVirtualList = VirtualList()(MyList);
@@ -69,7 +69,7 @@ describe('higher-order component that only renders visible items', () => {
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).not.toBe(undefined);
-  });  
+  });
 
   it('provides the style prop', () => {
     const MyVirtualList = VirtualList()(MyList);
@@ -141,12 +141,77 @@ describe('higher-order component that only renders visible items', () => {
       <MyVirtualList
         items={items}
         itemHeight={100}
-        />
+      />
       )
     );
 
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).toHaveLength(5);
+  });
+
+  it('has default mapVirtualToProps', () => {
+    const container = {
+      clientHeight: 500,
+      offsetTop: 0,
+    };
+
+    const options = {
+      container,
+      initialState: {
+        firstItemIndex: 0,
+        lastItemIndex: 4,
+      },
+    };
+
+    const MyVirtualList = VirtualList(options)(MyList);
+
+    const renderer = ReactTestUtils.createRenderer();
+    renderer.render(
+      (
+      <MyVirtualList
+        items={items}
+        itemHeight={100}
+      />
+      )
+    );
+
+    const result = renderer.getRenderOutput();
+
+    expect(result.props.virtual).toBeDefined();
+  });
+
+  it('allows custom mapVirtualToProps', () => {
+    const container = {
+      clientHeight: 500,
+      offsetTop: 0,
+    };
+
+    const options = {
+      container,
+      initialState: {
+        firstItemIndex: 0,
+        lastItemIndex: 4,
+      },
+    };
+
+    const mapVirtualToProps = ({ items }) => ({ customItemsRef: items })
+
+    const MyVirtualList = VirtualList(options, mapVirtualToProps)(MyList);
+
+    const renderer = ReactTestUtils.createRenderer();
+    renderer.render(
+      (
+      <MyVirtualList
+        items={items}
+        itemHeight={100}
+      />
+      )
+    );
+
+    const result = renderer.getRenderOutput();
+
+    expect(result.props.virtual).toBeUndefined();
+    expect(result.props.customItemsRef).toBeDefined();
   });
 });
