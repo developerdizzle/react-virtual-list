@@ -44,8 +44,8 @@
     "jasmine-node": "^1.14.5",
     "jest": "^17.0.3",
     "react": "^15.0.0",
-    "react-addons-test-utils": "^15.4.2",
-    "react-dom": "^15.0.0",
+    "react-dom": "^15.5.4",
+    "react-test-renderer": "^15.5.4",
     "webpack": "^1.13.3"
   },
   "peerDependencies": {
