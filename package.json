@@ -29,7 +29,9 @@
     "url": "https://github.com/developerdizzle/react-virtual-list/issues"
   },
   "homepage": "https://github.com/developerdizzle/react-virtual-list",
-  "dependencies": {},
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  },
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",

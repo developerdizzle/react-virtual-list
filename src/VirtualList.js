@@ -1,5 +1,6 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import getVisibleItemBounds from './utils/getVisibleItemBounds';
 import throttleWithRAF from './utils/throttleWithRAF';
