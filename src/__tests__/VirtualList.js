@@ -1,4 +1,4 @@
-import ReactTestUtils from 'react-addons-test-utils'
+import ShallowRenderer from 'react-test-renderer/shallow'
 import React from 'react';
 
 import VirtualList from '../VirtualList';
@@ -23,7 +23,7 @@ describe('higher-order component that only renders visible items', () => {
   it('renders the inner component', () => {
     const MyVirtualList = VirtualList()(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -40,7 +40,7 @@ describe('higher-order component that only renders visible items', () => {
   it('provides the virtual prop', () => {
     const MyVirtualList = VirtualList()(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -57,7 +57,7 @@ describe('higher-order component that only renders visible items', () => {
   it('provides the items prop', () => {
     const MyVirtualList = VirtualList()(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -74,7 +74,7 @@ describe('higher-order component that only renders visible items', () => {
   it('provides the style prop', () => {
     const MyVirtualList = VirtualList()(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -100,7 +100,7 @@ describe('higher-order component that only renders visible items', () => {
 
   //   const MyVirtualList = VirtualList(options)(MyList);
 
-  //   const renderer = ReactTestUtils.createRenderer();
+  //   const renderer = ShallowRenderer.createRenderer();
   //   renderer.render(
   //     (
   //     <MyVirtualList
@@ -135,7 +135,7 @@ describe('higher-order component that only renders visible items', () => {
 
     const MyVirtualList = VirtualList(options)(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -166,7 +166,7 @@ describe('higher-order component that only renders visible items', () => {
 
     const MyVirtualList = VirtualList(options)(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
@@ -199,7 +199,7 @@ describe('higher-order component that only renders visible items', () => {
 
     const MyVirtualList = VirtualList(options, mapVirtualToProps)(MyList);
 
-    const renderer = ReactTestUtils.createRenderer();
+    const renderer = ShallowRenderer.createRenderer();
     renderer.render(
       (
       <MyVirtualList
