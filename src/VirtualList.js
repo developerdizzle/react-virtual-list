@@ -42,7 +42,7 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       this.refreshState = this.refreshState.bind(this);
 
       // if requestAnimationFrame is available, use it to throttle refreshState
-      if (window && 'requestAnimationFrame' in window) {
+      if (typeof window !== 'undefined' && 'requestAnimationFrame' in window) {
         this.refreshState = throttleWithRAF(this.refreshState);
       }
     };
