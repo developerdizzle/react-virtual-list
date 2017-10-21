@@ -8,6 +8,8 @@ const makeItem = (i) => ({
 });
 
 const ConfigurableExample = (MyList) => {
+  let MyVirtualList = VirtualList()(MyList);
+
   return class MyConfigurableList extends PureComponent {
     constructor() {
       super();
@@ -30,15 +32,9 @@ const ConfigurableExample = (MyList) => {
       };
       
       this.state = state;
-
-      this.update = this.update.bind(this);
-
-      this.MyVirtualList = VirtualList()(MyList);
     };
 
-    update() {
-      console.log('update');
-
+    update = () => {
       const items = [];
       const itemCount = parseInt(this.refs.itemCount.value, 10);
 
@@ -63,15 +59,13 @@ const ConfigurableExample = (MyList) => {
           container: state.contained ? state.container : window,
         };
 
-        this.MyVirtualList = VirtualList(options)(MyList);
+        MyVirtualList = VirtualList(options)(MyList);
       }
       
       this.setState(state);
     };
 
     render() {
-      const MyVirtualList = this.MyVirtualList;
-
       return (
         <div>
           <div role="form" className="form-horizontal">
