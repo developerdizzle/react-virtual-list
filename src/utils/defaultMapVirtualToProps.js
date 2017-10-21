@@ -17,6 +17,7 @@ const defaultMapToVirtualProps = ({
       style: {
         height,
         paddingTop,
+        boxSizing: 'border-box',
       },
     }
   };
