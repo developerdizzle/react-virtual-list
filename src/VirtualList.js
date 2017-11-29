@@ -18,6 +18,8 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       itemBuffer: 0,
     };
 
+    _isMounted = false;
+
     constructor(props) {
       super(props);
 
@@ -59,10 +61,18 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
     }
 
     refreshState() {
+      if (!this._isMounted) {
+        return;
+      }
+      
       const { itemHeight, items, itemBuffer } = this.props;
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
     };
+
+    componentWillMount() {
+      this._isMounted = true;
+    }
 
     componentDidMount() {
       // cache the DOM node
@@ -77,6 +87,8 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
     };
 
     componentWillUnmount() {
+      this._isMounted = false;
+
       // remove events
       this.options.container.removeEventListener('scroll', this.refreshState);
       this.options.container.removeEventListener('resize', this.refreshState);
