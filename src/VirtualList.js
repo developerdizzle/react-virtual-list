@@ -52,10 +52,12 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
     setStateIfNeeded(list, container, items, itemHeight, itemBuffer) {
       // get first and lastItemIndex
       const state = getVisibleItemBounds(list, container, items, itemHeight, itemBuffer);
+
+      if (state === undefined) { return; }
       
       if (state.firstItemIndex > state.lastItemIndex) { return; }
 
-      if (state !== undefined && (state.firstItemIndex !== this.state.firstItemIndex || state.lastItemIndex !== this.state.lastItemIndex)) {
+      if (state.firstItemIndex !== this.state.firstItemIndex || state.lastItemIndex !== this.state.lastItemIndex) {
         this.setState(state);
       }
     }
