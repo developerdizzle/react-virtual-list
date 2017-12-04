@@ -3,10 +3,12 @@ import getElementTop from './getElementTop';
 
 const getVisibleItemBounds = (list, container, items, itemHeight, itemBuffer) => {
   // early return if we can't calculate
-  if (!container) return undefined;
-  if (!itemHeight) return  undefined;
-  if (!items) return undefined;
-  if (items.length === 0) return undefined;
+  if (!container || !itemHeight || !items || items.length === 0) {
+    return {
+      firstItemIndex: undefined,
+      lastItemIndex: undefined
+    };
+  }
 
   // what the user can see
   const { innerHeight, clientHeight } = container;
