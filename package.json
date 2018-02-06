@@ -1,6 +1,6 @@
 {
   "name": "react-virtual-list",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Super simple virtualized list React higher-order component",
   "main": "lib/VirtualList.js",
   "directories": {
