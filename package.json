@@ -45,13 +45,13 @@
     "gulp-react": "^3.0.1",
     "jasmine-node": "^1.14.5",
     "jest": "^17.0.3",
-    "react": "^15.0.0",
-    "react-dom": "^15.5.4",
-    "react-test-renderer": "^15.5.4",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-test-renderer": "^16.3.1",
     "webpack": "^1.13.3"
   },
   "peerDependencies": {
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
   }
 }
