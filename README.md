@@ -1,15 +1,17 @@
 # [react-virtual-list](http://developerdizzle.github.io/react-virtual-list/) [![Build Status](https://travis-ci.org/developerdizzle/react-virtual-list.svg?branch=master)](https://travis-ci.org/developerdizzle/react-virtual-list)
+![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react.svg)
 
-Super simple virtualized list [higher-order component](https://facebook.github.io/react/docs/higher-order-components.html) for [React](https://github.com/facebook/react) version `^15.0.0`.
+
+Super simple virtualized list [higher-order component](https://facebook.github.io/react/docs/higher-order-components.html) for [React](https://github.com/facebook/react) version `^15.0.0 || ^16.0.0`.
 
 [Check out the demo here](http://developerdizzle.github.io/react-virtual-list)
 
 `react-virtual-list` allows you to display a large list of fixed-height items, while only rendering the items visible on the screen.  This allows a large list to be rendered with much fewer DOM elements.
 
 ### Some other benefits:
-* Zero dependencies
-* Small - `~4.2k` gzipped & minified, `~4.9k` minified [http://i.imgur.com/DxRCuLv.png](http://i.imgur.com/DxRCuLv.png)
-* Decent performance - demo page almost always stays over 60fps [http://i.imgur.com/CHVCK9x.png](http://i.imgur.com/CHVCK9x.png)
+* One dependency (and it's `prop-types`)
+* [Small!](https://bundlephobia.com/result?p=react-virtual-list)
+* Performant - demo page almost always stays over 60fps [http://i.imgur.com/CHVCK9x.png](http://i.imgur.com/CHVCK9x.png)
 * Keeps your components separate - as a higher-order component
 * Gives you control - doesn't force any particular markup, but gives you the necessary styles and data to use.
 
