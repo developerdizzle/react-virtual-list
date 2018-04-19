@@ -1,5 +1,4 @@
-# [react-virtual-list](http://developerdizzle.github.io/react-virtual-list/) [![Build Status](https://travis-ci.org/developerdizzle/react-virtual-list.svg?branch=master)](https://travis-ci.org/developerdizzle/react-virtual-list)
-![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react.svg)
+# [react-virtual-list](http://developerdizzle.github.io/react-virtual-list/) [![Build Status](https://travis-ci.org/developerdizzle/react-virtual-list.svg?branch=master)](https://travis-ci.org/developerdizzle/react-virtual-list) ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/react.svg)
 
 
 Super simple virtualized list [higher-order component](https://facebook.github.io/react/docs/higher-order-components.html) for [React](https://github.com/facebook/react) version `^15.0.0 || ^16.0.0`.
