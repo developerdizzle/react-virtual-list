@@ -1,7 +1,7 @@
-import ShallowRenderer from 'react-test-renderer/shallow'
-import React from 'react';
+import ShallowRenderer from "react-test-renderer/shallow";
+import React from "react";
 
-import VirtualList from '../VirtualList';
+import VirtualList from "../VirtualList";
 
 const MyList = ({ itemHeight, virtual }) => {
   return (
@@ -13,76 +13,48 @@ const MyList = ({ itemHeight, virtual }) => {
   );
 };
 
-const items = Array.apply(null, {length: 1000}).map(Number.call, Number);
+const items = Array.apply(null, { length: 1000 }).map(Number.call, Number);
 
-describe('higher-order component that only renders visible items', () => {
-  it('is a function', () => {
-    expect(typeof VirtualList).toBe('function');
+describe("higher-order component that only renders visible items", () => {
+  it("is a function", () => {
+    expect(typeof VirtualList).toBe("function");
   });
 
-  it('renders the inner component', () => {
+  it("renders the inner component", () => {
     const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-        />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
     const result = renderer.getRenderOutput();
 
     expect(result.type).toBe(MyList);
   });
 
-  it('provides the virtual prop', () => {
+  it("provides the virtual prop", () => {
     const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-        />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).not.toBe(undefined);
   });
 
-  it('provides the items prop', () => {
+  it("provides the items prop", () => {
     const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-        />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).not.toBe(undefined);
   });
 
-  it('provides the style prop', () => {
+  it("provides the style prop", () => {
     const MyVirtualList = VirtualList()(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-        />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.style).not.toBe(undefined);
@@ -115,10 +87,10 @@ describe('higher-order component that only renders visible items', () => {
   //   expect(result.props.virtual.items).toHaveLength(5);
   // });
 
-  it('uses initialState options', () => {
+  it("uses initialState options", () => {
     const container = {
       clientHeight: 500,
-      offsetTop: 0,
+      offsetTop: 0
     };
 
     const options = {
@@ -128,86 +100,65 @@ describe('higher-order component that only renders visible items', () => {
         lastItemIndex: 4,
         style: {
           height: 500,
-          paddingTop: 0,
-        },
-      },
+          paddingTop: 0
+        }
+      }
     };
 
     const MyVirtualList = VirtualList(options)(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-      />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
 
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual.items).toHaveLength(5);
   });
 
-  it('has default mapVirtualToProps', () => {
+  it("has default mapVirtualToProps", () => {
     const container = {
       clientHeight: 500,
-      offsetTop: 0,
+      offsetTop: 0
     };
 
     const options = {
       container,
       initialState: {
         firstItemIndex: 0,
-        lastItemIndex: 4,
-      },
+        lastItemIndex: 4
+      }
     };
 
     const MyVirtualList = VirtualList(options)(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-      />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
 
     const result = renderer.getRenderOutput();
 
     expect(result.props.virtual).toBeDefined();
   });
 
-  it('allows custom mapVirtualToProps', () => {
+  it("allows custom mapVirtualToProps", () => {
     const container = {
       clientHeight: 500,
-      offsetTop: 0,
+      offsetTop: 0
     };
 
     const options = {
       container,
       initialState: {
         firstItemIndex: 0,
-        lastItemIndex: 4,
-      },
+        lastItemIndex: 4
+      }
     };
 
-    const mapVirtualToProps = ({ items }) => ({ customItemsRef: items })
+    const mapVirtualToProps = ({ items }) => ({ customItemsRef: items });
 
     const MyVirtualList = VirtualList(options, mapVirtualToProps)(MyList);
 
     const renderer = ShallowRenderer.createRenderer();
-    renderer.render(
-      (
-      <MyVirtualList
-        items={items}
-        itemHeight={100}
-      />
-      )
-    );
+    renderer.render(<MyVirtualList items={items} itemHeight={100} />);
 
     const result = renderer.getRenderOutput();
 

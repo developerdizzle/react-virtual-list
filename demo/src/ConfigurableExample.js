@@ -32,7 +32,7 @@ const ConfigurableExample = (MyList) => {
       };
       
       this.state = state;
-    };
+    }
 
     update = () => {
       const items = [];

@@ -1,17 +1,17 @@
-import getElementTop from '../getElementTop';
+import getElementTop from "../getElementTop";
 
-describe('function to get top position of element', () => {
-  it('is a function', () => {
-    expect(typeof getElementTop).toBe('function');
+describe("function to get top position of element", () => {
+  it("is a function", () => {
+    expect(typeof getElementTop).toBe("function");
   });
 
-  it('returns pageYOffset for window', () => {
+  it("returns pageYOffset for window", () => {
     const element = {
       pageYOffset: 10,
       document: {
-        documentElement: { },
-        body: { },
-      },
+        documentElement: {},
+        body: {}
+      }
     };
 
     const top = getElementTop(element);
@@ -22,14 +22,14 @@ describe('function to get top position of element', () => {
     expect(top).not.toBe(element.document.body.scrollTop);
   });
 
-  it('falls back to documentElement.scrollTop for window', () => {
+  it("falls back to documentElement.scrollTop for window", () => {
     const element = {
       document: {
         documentElement: {
-          scrollTop: 10,
+          scrollTop: 10
         },
-        body: { },
-      },
+        body: {}
+      }
     };
 
     const top = getElementTop(element);
@@ -40,14 +40,14 @@ describe('function to get top position of element', () => {
     expect(top).not.toBe(element.document.body.scrollTop);
   });
 
-  it('falls back to body.scrollTop for window', () => {
+  it("falls back to body.scrollTop for window", () => {
     const element = {
       document: {
-        documentElement: { },
+        documentElement: {},
         body: {
-          scrollTop: 10,
-        },
-      },
+          scrollTop: 10
+        }
+      }
     };
 
     const top = getElementTop(element);
@@ -58,12 +58,12 @@ describe('function to get top position of element', () => {
     expect(top).toBe(element.document.body.scrollTop);
   });
 
-  it('falls back to 0 for window', () => {
+  it("falls back to 0 for window", () => {
     const element = {
       document: {
-        documentElement: { },
-        body: { },
-      },
+        documentElement: {},
+        body: {}
+      }
     };
 
     const top = getElementTop(element);
@@ -74,10 +74,9 @@ describe('function to get top position of element', () => {
     expect(top).not.toBe(element.document.body.scrollTop);
   });
 
-  
-  it('returns scrollY for element', () => {
+  it("returns scrollY for element", () => {
     const element = {
-      scrollY: 10,
+      scrollY: 10
     };
 
     const top = getElementTop(element);
@@ -86,10 +85,10 @@ describe('function to get top position of element', () => {
     expect(top).toBe(element.scrollY);
     expect(top).not.toBe(element.scrollTop);
   });
-  
-  it('falls back to scrollTop for element', () => {
+
+  it("falls back to scrollTop for element", () => {
     const element = {
-      scrollTop: 10,
+      scrollTop: 10
     };
 
     const top = getElementTop(element);
@@ -98,9 +97,9 @@ describe('function to get top position of element', () => {
     expect(top).not.toBe(element.scrollY);
     expect(top).toBe(element.scrollTop);
   });
-  
-  it('falls back to 0 for element', () => {
-    const element = { };
+
+  it("falls back to 0 for element", () => {
+    const element = {};
 
     const top = getElementTop(element);
 

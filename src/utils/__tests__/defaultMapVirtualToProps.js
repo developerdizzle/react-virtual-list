@@ -1,28 +1,28 @@
-import defaultMapVirtualToProps from '../defaultMapVirtualToProps';
+import defaultMapVirtualToProps from "../defaultMapVirtualToProps";
 
 const defaultProps = {
   items: [1, 2, 3, 4, 5],
-  itemHeight: 100,
+  itemHeight: 100
 };
 
 const defaultState = {
   firstItemIndex: 0,
-  lastItemIndex: 4,
+  lastItemIndex: 4
 };
 
-describe('function to convert state and props into virtual props', () => {
-  it('is a function', () => {
-    expect(typeof defaultMapVirtualToProps).toBe('function');
+describe("function to convert state and props into virtual props", () => {
+  it("is a function", () => {
+    expect(typeof defaultMapVirtualToProps).toBe("function");
   });
 
-  it('returns object with items prop', () => {
+  it("returns object with items prop", () => {
     const props = defaultMapVirtualToProps(defaultProps, defaultState);
 
     expect(props.virtual).toBeDefined();
     expect(props.virtual.items).toBeDefined();
   });
 
-  it('returns object with style prop', () => {
+  it("returns object with style prop", () => {
     const props = defaultMapVirtualToProps(defaultProps, defaultState);
 
     expect(props.virtual).toBeDefined();
@@ -31,13 +31,13 @@ describe('function to convert state and props into virtual props', () => {
     expect(props.virtual.style.paddingTop).toBeDefined();
   });
 
-  it('calculates items properly', () => {
+  it("calculates items properly", () => {
     const props = defaultMapVirtualToProps(defaultProps, defaultState);
 
     expect(props.virtual.items).toHaveLength(5);
   });
 
-  it('calculates style properly', () => {
+  it("calculates style properly", () => {
     const props = defaultMapVirtualToProps(defaultProps, defaultState);
 
     expect(props.virtual.style.height).toBe(500);

@@ -1,4 +1,4 @@
-export default (fn) => {
+export default fn => {
   let running = false;
 
   return () => {

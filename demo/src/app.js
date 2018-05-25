@@ -2,8 +2,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import ConfigurableExample from './ConfigurableExample';
 
-require('file?name=[name].[ext]!./index.html');
-
 const MyList = ({
   virtual,
   itemHeight,
