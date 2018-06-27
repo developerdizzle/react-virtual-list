@@ -1,4 +1,4 @@
-const defaultMapToVirtualProps = ({
+const defaultMapVirtualParameter = ({
   items,
   itemHeight,
 }, {
@@ -12,15 +12,13 @@ const defaultMapToVirtualProps = ({
   const paddingTop = firstItemIndex * itemHeight;
 
   return {
-    virtual: {
-      items: visibleItems,
-      style: {
-        height,
-        paddingTop,
-        boxSizing: 'border-box',
-      },
-    }
+    items: visibleItems,
+    style: {
+      height,
+      paddingTop,
+      boxSizing: 'border-box',
+    },
   };
 }
 
-export default defaultMapToVirtualProps;
+export default defaultMapVirtualParameter;

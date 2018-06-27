@@ -1,4 +1,4 @@
-export default (fn) => {
+const throttleWithRAF = (fn) => {
   let running = false;
 
   return () => {
@@ -13,3 +13,5 @@ export default (fn) => {
     });
   };
 };
+
+export default throttleWithRAF;
