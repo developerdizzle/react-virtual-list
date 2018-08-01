@@ -54,7 +54,7 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       const state = getVisibleItemBounds(list, container, items, itemHeight, itemBuffer);
 
       if (state === undefined) { return; }
-      
+
       if (state.firstItemIndex > state.lastItemIndex) { return; }
 
       if (state.firstItemIndex !== this.state.firstItemIndex || state.lastItemIndex !== this.state.lastItemIndex) {
@@ -66,7 +66,7 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       if (!this._isMounted) {
         return;
       }
-      
+
       const { itemHeight, items, itemBuffer } = this.props;
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
@@ -84,16 +84,20 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       this.refreshState();
 
       // add events
-      this.options.container.addEventListener('scroll', this.refreshState);
-      this.options.container.addEventListener('resize', this.refreshState);
+      if (this.options.container) {
+        this.options.container.addEventListener('scroll', this.refreshState);
+        this.options.container.addEventListener('resize', this.refreshState);
+      }
     };
 
     componentWillUnmount() {
       this._isMounted = false;
 
       // remove events
-      this.options.container.removeEventListener('scroll', this.refreshState);
-      this.options.container.removeEventListener('resize', this.refreshState);
+      if (this.options.container) {
+        this.options.container.removeEventListener('scroll', this.refreshState);
+        this.options.container.removeEventListener('resize', this.refreshState);
+      }
     };
 
     // if props change, just assume we have to recalculate
