@@ -14,6 +14,8 @@ const defaultMapToVirtualProps = ({
   return {
     virtual: {
       items: visibleItems,
+      firstItemIndex,
+      lastItemIndex,
       style: {
         height,
         paddingTop,
