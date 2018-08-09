@@ -3,17 +3,16 @@ import getElementTop from './getElementTop';
 
 const getVisibleItemBounds = (list, container, items, itemHeight, itemBuffer) => {
   // early return if we can't calculate
-  if (!container) return undefined;
-  if (!itemHeight) return  undefined;
-  if (!items) return undefined;
-  if (items.length === 0) return undefined;
+  if (!container || !itemHeight || !items || items.length === 0) {
+    return null
+  }
 
   // what the user can see
   const { innerHeight, clientHeight } = container;
 
   const viewHeight = innerHeight || clientHeight; // how many pixels are visible
 
-  if (!viewHeight) return undefined;
+  if (!viewHeight) return null;
 
   const viewTop = getElementTop(container); // top y-coordinate of viewport inside container
   const viewBottom = viewTop + viewHeight;

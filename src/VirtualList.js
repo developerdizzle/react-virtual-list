@@ -7,7 +7,25 @@ import throttleWithRAF from './utils/throttleWithRAF';
 import defaultMapToVirtualProps from './utils/defaultMapVirtualToProps';
 
 const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (InnerComponent) => {
-  return class vlist extends PureComponent {
+  return class VList extends PureComponent {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        firstItemIndex: 0,
+        lastItemIndex: -1,
+        options: {
+          container: typeof window !== 'undefined' ? window : undefined,
+          ...options,
+        }
+      };
+
+      // if requestAnimationFrame is available, use it to throttle refreshState
+      if (typeof window !== 'undefined' && 'requestAnimationFrame' in window) {
+        this.refreshState = throttleWithRAF(this.refreshState);
+      }
+    };
+
     static propTypes = {
       items: PropTypes.array.isRequired,
       itemHeight: PropTypes.number.isRequired,
@@ -20,87 +38,85 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
 
     _isMounted = false;
 
-    constructor(props) {
-      super(props);
-
-      this.options = {
-        container: typeof window !== 'undefined' ? window : undefined,
-        ...options,
-      };
-
-      this.state = {
-        firstItemIndex: 0,
-        lastItemIndex: -1,
-      };
-
-      // initialState allows us to set the first/lastItemIndex (useful for server-rendering)
-      if (options && options.initialState) {
-        this.state = {
-          ...this.state,
-          ...options.initialState,
-        };
-      }
-
-      this.refreshState = this.refreshState.bind(this);
-
-      // if requestAnimationFrame is available, use it to throttle refreshState
-      if (typeof window !== 'undefined' && 'requestAnimationFrame' in window) {
-        this.refreshState = throttleWithRAF(this.refreshState);
-      }
-    };
-
-    setStateIfNeeded(list, container, items, itemHeight, itemBuffer) {
-      // get first and lastItemIndex
-      const state = getVisibleItemBounds(list, container, items, itemHeight, itemBuffer);
-
-      if (state === undefined) { return; }
-      
-      if (state.firstItemIndex > state.lastItemIndex) { return; }
-
-      if (state.firstItemIndex !== this.state.firstItemIndex || state.lastItemIndex !== this.state.lastItemIndex) {
-        this.setState(state);
-      }
-    }
-
-    refreshState() {
-      if (!this._isMounted) {
-        return;
-      }
-      
-      const { itemHeight, items, itemBuffer } = this.props;
-
-      this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
-    };
-
-    componentWillMount() {
-      this._isMounted = true;
-    }
-
     componentDidMount() {
+      const { options: { container } } = this.state
+
+      this._isMounted = true;
+
       // cache the DOM node
-      this.domNode = ReactDOM.findDOMNode(this);
+      this.setState({domNode: ReactDOM.findDOMNode(this)});
 
       // we need to refreshState because we didn't have access to the DOM node before
       this.refreshState();
 
       // add events
-      this.options.container.addEventListener('scroll', this.refreshState);
-      this.options.container.addEventListener('resize', this.refreshState);
+      container.addEventListener('scroll', this.refreshState);
+      container.addEventListener('resize', this.refreshState);
     };
 
     componentWillUnmount() {
+      const { options: { container } } = this.state
+
       this._isMounted = false;
 
       // remove events
-      this.options.container.removeEventListener('scroll', this.refreshState);
-      this.options.container.removeEventListener('resize', this.refreshState);
+      container.removeEventListener('scroll', this.refreshState);
+      container.removeEventListener('resize', this.refreshState);
     };
 
-    // if props change, just assume we have to recalculate
-    componentWillReceiveProps(nextProps) {
-      const { itemHeight, items, itemBuffer } = nextProps;
+    static setStateIfNeeded(list, container, items, itemHeight, itemBuffer, firstItemIndex, lastItemIndex) {
+      // get first and lastItemIndex
+      const state = getVisibleItemBounds(list, container, items, itemHeight, itemBuffer);
 
-      this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
+      if (state === undefined) { return null; }
+      
+      if (state.firstItemIndex > state.lastItemIndex) { return null; }
+
+      if (state.firstItemIndex !== firstItemIndex || state.lastItemIndex !== lastItemIndex) {
+        return state;
+      }
+    }
+
+    // if props change, just assume we have to recalculate
+    static getDerivedStateFromProps(nextProps, nextState) {
+      const { itemHeight, items, itemBuffer } = nextProps;
+      const { domNode, options: { container }, firstItemIndex, lastItemIndex } = nextState
+
+      const state = VList.setStateIfNeeded(
+        domNode, 
+        container, 
+        items, 
+        itemHeight, 
+        itemBuffer,
+        firstItemIndex,
+        lastItemIndex,
+      );
+
+      if (state === undefined) {
+        return null;
+      }
+
+      return state;
+    };
+
+    refreshState = () => {
+      if (!this._isMounted) {
+        return;
+      }
+      
+      const { itemHeight, items, itemBuffer } = this.props;
+      const { domNode, options: { container }, firstItemIndex, lastItemIndex } = this.state
+      const state = VList.setStateIfNeeded(
+        domNode, 
+        container, 
+        items, 
+        itemHeight, 
+        itemBuffer,
+        firstItemIndex,
+        lastItemIndex,
+      );
+
+      this.setState(state)
     };
 
     render() {
