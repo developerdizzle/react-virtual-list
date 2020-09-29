@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import VirtualList from '../../src/VirtualList';
+import {getVisibleBoundsFnFactory} from './getVisibleBoundsFnFactory'
 
 const makeItem = (i) => ({
   id: i,
@@ -21,16 +22,18 @@ const ConfigurableExample = (MyList) => {
       for (let i = 0; i < defaultItemCount; i++) {
         items[i] = makeItem(i);
       }
-      
+
       const state = {
         itemHeight: 100,
         itemCount: defaultItemCount,
         items: items,
         contained: false,
         containerHeight: 250,
+        additiveOnly: false,
         itemBuffer: 0,
+        getVisibleBoundsFn: getVisibleBoundsFnFactory()
       };
-      
+
       this.state = state;
     };
 
@@ -41,9 +44,10 @@ const ConfigurableExample = (MyList) => {
       for (var i = 0; i < itemCount; i++) {
         items[i] = makeItem(i);
       }
-      
+
       const contained = this.refs.contained.checked;
-      
+      const additiveOnly = this.refs.additiveOnly.checked;
+
       const state = {
         itemHeight: parseInt(this.refs.itemHeight.value, 10),
         itemCount: itemCount,
@@ -51,7 +55,9 @@ const ConfigurableExample = (MyList) => {
         contained: contained,
         container: this.refs.container,
         containerHeight: parseInt(this.refs.containerHeight.value, 10),
+        additiveOnly: additiveOnly,
         itemBuffer: parseInt(this.refs.itemBuffer.value, 10),
+        getVisibleBoundsFn: getVisibleBoundsFnFactory()
       };
 
       if (state.contained !== this.state.contained) {
@@ -61,7 +67,7 @@ const ConfigurableExample = (MyList) => {
 
         MyVirtualList = VirtualList(options)(MyList);
       }
-      
+
       this.setState(state);
     };
 
@@ -74,9 +80,9 @@ const ConfigurableExample = (MyList) => {
               <div className="col-xs-6 col-sm-4">
                 <input onChange={this.update} className="form-control" type="checkbox" checked ={this.state.contained} id="contained" ref="contained" />
               </div>
-              <label className="col-xs-6 col-sm-2" htmlFor="containerHeight">Container Height</label>
+              <label className="col-xs-6 col-sm-2" htmlFor="additiveOnly">Additive rendering only</label>
               <div className="col-xs-6 col-sm-4">
-                <input onChange={this.update} className="form-control" type="number" min="0" max="10000" value={this.state.containerHeight} id="containerHeight" ref="containerHeight" />
+                <input onChange={this.update} className="form-control" type="checkbox" checked ={this.state.additiveOnly} id="additiveOnly" ref="additiveOnly" />
               </div>
             </div>
             <div className="form-group">
@@ -84,9 +90,9 @@ const ConfigurableExample = (MyList) => {
               <div className="col-xs-6 col-sm-4">
                 <input onChange={this.update} className="form-control" type="number" min="0" value={this.state.itemHeight} id="itemHeight" ref="itemHeight" />
               </div>
-              <label className="col-xs-6 col-sm-2" htmlFor="itemCount">Item Count</label>
+              <label className="col-xs-6 col-sm-2" htmlFor="containerHeight">Container Height</label>
               <div className="col-xs-6 col-sm-4">
-                <input onChange={this.update} className="form-control" type="number" min="0" value={this.state.itemCount} id="itemCount" ref="itemCount" />
+                <input onChange={this.update} className="form-control" type="number" min="0" max="10000" value={this.state.containerHeight} id="containerHeight" ref="containerHeight" />
               </div>
             </div>
             <div className="form-group">
@@ -94,11 +100,16 @@ const ConfigurableExample = (MyList) => {
               <div className="col-xs-6 col-sm-4">
                 <input onChange={this.update} className="form-control" type="number" min="0" value={this.state.itemBuffer} id="itemBuffer" ref="itemBuffer" />
               </div>
+              <label className="col-xs-6 col-sm-2" htmlFor="itemCount">Item Count</label>
+              <div className="col-xs-6 col-sm-4">
+                <input onChange={this.update} className="form-control" type="number" min="0" value={this.state.itemCount} id="itemCount" ref="itemCount" />
+              </div>
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12" id="container" ref="container" style={this.state.contained ? { overflow: 'scroll', height: this.state.containerHeight } : {}}>
               <MyVirtualList
+                getVisibleItemBounds={this.state.additiveOnly ? this.state.getVisibleBoundsFn : null}
                 items={this.state.items}
                 itemBuffer={this.state.itemBuffer}
                 itemHeight={this.state.itemHeight}
