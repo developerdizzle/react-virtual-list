@@ -2,19 +2,21 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import getVisibleItemBounds from './utils/getVisibleItemBounds';
+import defaultGetVisibleItemBounds from './utils/getVisibleItemBounds';
 import throttleWithRAF from './utils/throttleWithRAF';
 import defaultMapToVirtualProps from './utils/defaultMapVirtualToProps';
 
 const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (InnerComponent) => {
   return class vlist extends PureComponent {
     static propTypes = {
+      getVisibleItemBounds: PropTypes.func,
       items: PropTypes.array.isRequired,
       itemHeight: PropTypes.number.isRequired,
       itemBuffer: PropTypes.number,
     };
 
     static defaultProps = {
+      getVisibleItemBounds: undefined,
       itemBuffer: 0,
     };
 
@@ -51,10 +53,11 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
 
     setStateIfNeeded(list, container, items, itemHeight, itemBuffer) {
       // get first and lastItemIndex
-      const state = getVisibleItemBounds(list, container, items, itemHeight, itemBuffer);
+      const stateFactory = this.props.getVisibleItemBounds || defaultGetVisibleItemBounds;
+      const state = stateFactory(list, container, items, itemHeight, itemBuffer, defaultGetVisibleItemBounds);
 
       if (state === undefined) { return; }
-      
+
       if (state.firstItemIndex > state.lastItemIndex) { return; }
 
       if (state.firstItemIndex !== this.state.firstItemIndex || state.lastItemIndex !== this.state.lastItemIndex) {
@@ -66,7 +69,7 @@ const VirtualList = (options, mapVirtualToProps = defaultMapToVirtualProps) => (
       if (!this._isMounted) {
         return;
       }
-      
+
       const { itemHeight, items, itemBuffer } = this.props;
 
       this.setStateIfNeeded(this.domNode, this.options.container, items, itemHeight, itemBuffer);
